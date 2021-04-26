@@ -1,0 +1,7 @@
+<label for="output">Output:</label>
+<textarea name="output" rows="10" cols="30">
+{{output}}
+</textarea>
+<br>
+<label for="input">Input:</label>
+<input [(ngModel)]="input" type="text" id="input" name="input" (keyup.enter)="onEnter()">
