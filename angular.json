@@ -53,7 +53,9 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/app/parser/rules.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -38,9 +38,9 @@ export class Parser {
   
   parse(str: String) {
     this.init();
-    const tokenizer = Token.getInst()
-    const tokens = tokenizer.tokenize(str)
-    this.tokens = tokens
+    // Get Token
+    this.tokens = Token.getInst().tokenize(str);
+    // Parse
     while (this.current().type != 'EOF') {
       const expr = this.add()
       if (expr)
