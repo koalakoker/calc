@@ -1,9 +1,8 @@
-// Simple Arithmetics Grammar
-// ==========================
-//
-// Accepts expressions like "2 * (3 + 4)" and computes their value.
+{
+  var variables = [];
+}
 
-Input = Expression / Command
+Input = Expression / VarAssign / Command / VarName
 
 Expression
   = head:Term tail:(_ ("+" / "-") _ Term)* {
@@ -27,13 +26,11 @@ Factor
 
 Number "number"
   = _ ([-]*[0-9]*[\.][0-9]*) {
-  	console.log("Number:"+text());
     return parseFloat(text());
   }
 
 Integer "integer"
   = _ [0-9]+ {
-    console.log("Integer:"+text());
   	return parseInt(text(), 10);
   }
   
@@ -41,4 +38,15 @@ _ "whitespace"
   = [ \t\n\r]*
   
 Command "command"
- = "cmd" {console.log("Ciao")}
+  = "print" {
+  	return variables;
+  }
+  
+VarName "var name"
+ = [A-Za-z]* {return text();}
+  
+VarAssign "var assignment"
+ = _ varName:VarName _[=]_ value:(Number / Integer) {
+ 	variables.push({varName,value});
+ 	return variables;
+ }

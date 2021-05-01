@@ -14,6 +14,7 @@ export class AppComponent {
   onEnter() {
     this.output += this.input + "\n";
     let parsed = parser.parse(this.input);
+    console.log(parser.variables);
     this.output += "ans = " + parsed + "\n";
     this.input = "";
   }
