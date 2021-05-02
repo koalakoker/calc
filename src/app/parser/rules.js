@@ -178,11 +178,11 @@ function peg$parse(input, options) {
       peg$c20 = /^[.]/,
       peg$c21 = peg$classExpectation(["."], false, false),
       peg$c22 = function() {
-          return parseFloat(text());
+          return ex_parseFloat(text());
         },
       peg$c23 = peg$otherExpectation("integer"),
       peg$c24 = function() {
-        	return parseInt(text(), 10);
+        	return ex_parseInt(text());
         },
       peg$c25 = peg$otherExpectation("whitespace"),
       peg$c26 = /^[ \t\n\r]/,
@@ -975,6 +975,10 @@ function peg$parse(input, options) {
 }
 
 var ex_variables = [];
+
+var ex_parseInt = function (x) { return parseInt(x, 10) };
+var ex_parseFloat = function (x) { return parseFloat(x) };
+
 var ex_myAdd = function (a, b) { return a + b };
 var ex_mySub = function (a, b) { return a - b };
 var ex_myMul = function (a, b) { return a * b };
