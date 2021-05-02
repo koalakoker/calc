@@ -1,5 +1,9 @@
 {
-  var variables = [];
+  var ex_variables = [];
+  var ex_myAdd = function(a,b){return a+b};
+  var ex_mySub = function(a,b){return a-b};
+  var ex_myMul = function(a,b){return a*b};
+  var ex_myDiv = function(a,b){return a/b};
 }
 
 Input = Expression / VarAssign / Command / VarName
@@ -7,16 +11,24 @@ Input = Expression / VarAssign / Command / VarName
 Expression
   = head:Term tail:(_ ("+" / "-") _ Term)* {
       return tail.reduce(function(result, element) {
-        if (element[1] === "+") { return result + element[3]; }
-        if (element[1] === "-") { return result - element[3]; }
+        if (element[1] === "+") {
+        	return ex_myAdd(result, element[3]); 
+        }
+        if (element[1] === "-") {
+            return ex_mySub(result, element[3]); 
+        }
       }, head);
     }
 
 Term
   = head:Factor tail:(_ ("*" / "/") _ Factor)* {
       return tail.reduce(function(result, element) {
-        if (element[1] === "*") { return result * element[3]; }
-        if (element[1] === "/") { return result / element[3]; }
+        if (element[1] === "*") {
+        	return ex_myMul(result, element[3]); 
+        }
+        if (element[1] === "/") {
+        	return ex_myDiv(result, element[3]);
+        }
       }, head);
     }
 
@@ -39,7 +51,7 @@ _ "whitespace"
   
 Command "command"
   = "print" {
-  	return variables;
+  	return ex_variables;
   }
   
 VarName "var name"
@@ -47,6 +59,6 @@ VarName "var name"
   
 VarAssign "var assignment"
  = _ varName:VarName _[=]_ value:(Number / Integer) {
- 	variables.push({varName,value});
- 	return variables;
+ 	ex_variables.push({varName,value});
+ 	return ex_variables;
  }
