@@ -1,16 +1,29 @@
 {
   var ex_variables = [];
   
-  var ex_parseInt = function(x) {return parseInt(text(), 10)};
+  var ex_parseInt = function(x) {return parseInt(x, 10)};
   var ex_parseFloat = function(x) {return parseFloat(x)};
   
   var ex_myAdd = function(a,b){return a+b};
   var ex_mySub = function(a,b){return a-b};
   var ex_myMul = function(a,b){return a*b};
   var ex_myDiv = function(a,b){return a/b};
+  var ex_myPow = function(a,b){return Math.pow(a,b)};
+  var ex_myPar = function(r1,r2){return ((r1*r2)/(r1+r2))};
+
+  var getVarValue = function(variable) {
+    var value = 0;
+    ex_variables.forEach(element => {
+      if (element.varName === variable) {
+        value = element.value;
+      }
+    });
+    return value;
+  }
+
 }
 
-Input = Expression / VarAssign / Command / VarName
+Input = Expression / VarAssign / Command / VarValue
 
 Expression
   = head:Term tail:(_ ("+" / "-") _ Term)* {
@@ -37,6 +50,20 @@ Term
     }
 
 Factor
+  = head:Power tail:(_ "^" _ Power)* { 
+  	  return tail.reduce(function(result, element) {
+        return ex_myPow(result, element[3]);
+      }, head);
+    }
+
+Power
+  = head:Parallel tail:(_ ":" _ Parallel)* {
+  	return tail.reduce(function(result, element) {
+    	return ex_myPar(result, element[3]);
+    }, head);
+  }
+
+Parallel
   = "(" _ expr:Expression _ ")" { return expr; }
   / Number / Integer
 
@@ -60,9 +87,14 @@ Command "command"
   
 VarName "var name"
  = [A-Za-z]* {return text();}
+ 
+VarValue "var value"
+ = [A-Za-z]* {
+   return getVarValue(text());
+ }
   
 VarAssign "var assignment"
- = _ varName:VarName _[=]_ value:(Number / Integer) {
+ = _ varName:VarName _[=]_ value:Expression {
  	ex_variables.push({varName,value});
- 	return ex_variables;
+ 	return value;
  }
