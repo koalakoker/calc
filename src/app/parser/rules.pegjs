@@ -23,7 +23,7 @@
 
 }
 
-Input = Expression / VarAssign / Command / VarValue
+Input = VarAssign / Expression / Command / VarValue
 
 Expression
   = head:Term tail:(_ ("+" / "-") _ Term)* {
@@ -65,7 +65,7 @@ Power
 
 Parallel
   = "(" _ expr:Expression _ ")" { return expr; }
-  / Number / Integer
+  / Number / Integer / VarValue
 
 Number "number"
   = _ ([-]*[0-9]*[\.][0-9]*) {

@@ -367,9 +367,9 @@ function peg$parse(input, options) {
   function peg$parseInput() {
     var s0;
 
-    s0 = peg$parseExpression();
+    s0 = peg$parseVarAssign();
     if (s0 === peg$FAILED) {
-      s0 = peg$parseVarAssign();
+      s0 = peg$parseExpression();
       if (s0 === peg$FAILED) {
         s0 = peg$parseCommand();
         if (s0 === peg$FAILED) {
@@ -838,6 +838,9 @@ function peg$parse(input, options) {
       s0 = peg$parseNumber();
       if (s0 === peg$FAILED) {
         s0 = peg$parseInteger();
+        if (s0 === peg$FAILED) {
+          s0 = peg$parseVarValue();
+        }
       }
     }
 
@@ -1206,6 +1209,8 @@ function peg$parse(input, options) {
       return value;
     }
 
+
+
   peg$result = peg$startRuleFunction();
 
   if (peg$result !== peg$FAILED && peg$currPos === input.length) {
@@ -1227,14 +1232,14 @@ function peg$parse(input, options) {
 
 var ex_variables = [];
 
-var ex_parseInt   = function (x) { return new Decimal(x) };
+var ex_parseInt = function (x) { return new Decimal(x) };
 var ex_parseFloat = function (x) { return new Decimal(x) };
 
-var ex_myAdd = function (a, b)   { return a.plus(b); }
-var ex_mySub = function (a, b)   { return a.minus(b); }
-var ex_myMul = function (a, b)   { return a.times(b); }
-var ex_myDiv = function (a, b)   { return a.dividedBy(b); }
-var ex_myPow = function (a, b)   { return a.toPower(b); }
+var ex_myAdd = function (a, b) { return a.plus(b); }
+var ex_mySub = function (a, b) { return a.minus(b); }
+var ex_myMul = function (a, b) { return a.times(b); }
+var ex_myDiv = function (a, b) { return a.dividedBy(b); }
+var ex_myPow = function (a, b) { return a.toPower(b); }
 var ex_myPar = function (r1, r2) { return r1.times(r2).dividedBy(r1.plus(r2)) };
 
 export var SyntaxError = peg$SyntaxError;
