@@ -10,11 +10,26 @@ export class AppComponent {
   title = 'calc';
   input: string = "";
   output: string = "";
+  vars: string = "";
+  functions: string = "";
   
-  onEnter() {
-    this.output += this.input + "\n";
+  onChange() {
     let parsed = parser.parse(this.input);
-    this.output += "ans = " + parsed + "\n";
-    this.input = "";
+    console.log(parsed);
+    
+    this.output = "";
+    parsed.results.forEach(element => {
+      this.output += element + "\n";
+    });
+
+    this.vars = "";
+    for (const [key] of Object.entries(parsed.vars)) {
+      this.vars += key + '=' + parsed.vars[key].value + "\n";
+    };
+
+    this.functions = "";
+    for (const [key] of Object.entries(parsed.functions)) {
+      this.functions += key + '=' + parsed.functions[key].expr + "\n";
+    };
   }
 }
