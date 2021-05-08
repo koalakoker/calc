@@ -3,8 +3,8 @@ import * as parser from './parser/rules';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styles: []
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'calc';
@@ -29,7 +29,8 @@ export class AppComponent {
 
     this.functions = "";
     for (const [key] of Object.entries(parsed.functions)) {
-      this.functions += key + '=' + parsed.functions[key].expr + "\n";
+      let value = parsed.functions[key];
+      this.functions += key + "(" + value.arg + ')=' + value.expr + "\n";
     };
   }
 }
