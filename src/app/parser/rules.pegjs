@@ -18,10 +18,8 @@
   
   var evaluate = function(head, tail) {
   	ans = head;
-  	ex_results.push(ans);
   	tail.reduce(function(result, element) {
-    	ans = element[2];
-    	ex_results.push(ans);	
+    	ans = element[2];	
     	return ans;
     }, head);
   }
@@ -87,7 +85,11 @@ Program =
     };
   }
 
-Input = FnAssign / VarAssign / Expression / Command / FnValue / VarValue
+Input = ans:( FnAssign / VarAssign / 
+        Expression / Command / FnValue / AnsValue / VarValue) {
+        setVar("ans", ans);
+    	ex_results.push(ans);
+	}
 
 Expression = 
   head:Term tail:(_ ("+" / "-") _ Term)* {
@@ -99,7 +101,6 @@ Expression =
           return ex_mySub(result, element[3]); 
       }
     }, head);
-    setVar("ans", ans);
     return ans;
   }
 
@@ -131,7 +132,7 @@ Power =
 
 Parallel = 
   "(" _ expr:Expression _ ")" { return expr; }
-  / Number / Integer / FnValue / VarValue 
+  / Number / Integer / FnValue / AnsValue / VarValue
 
 Number "number" = 
   _ ([-]*[0-9]*[\.][0-9]*) {
@@ -161,7 +162,10 @@ VarValue "var value" =
   ("pi"/"PI") {return ex_myPI();}
   / ("e" / "E") {return ex_myE();}
   / [A-Za-z]* {return getVarValue(text());}
- 
+
+AnsValue "Previous answer value" =
+  "ans["line:Integer"]" {return ex_results[line];}
+
 FnValue "function value" = 
   _ fnName:Name _ [(] _ fnArg:ExpressionList _ [)] {
   return ex_fn(fnName, fnArg);

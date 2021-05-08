@@ -9,7 +9,7 @@ import * as parser from './parser/rules';
 export class AppComponent {
   title = 'calc';
   input: string = "";
-  output: string = "";
+  ans: string = "";
   vars: string = "";
   functions: string = "";
   
@@ -17,9 +17,9 @@ export class AppComponent {
     let parsed = parser.parse(this.input);
     //console.log(parsed);
     
-    this.output = "";
-    parsed.results.forEach(element => {
-      this.output += element + "\n";
+    this.ans = "";
+    parsed.results.forEach((element,index) => {
+      this.ans += "[" + index + "]: " + element + "\n";
     });
 
     this.vars = "";
