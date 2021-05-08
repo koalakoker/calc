@@ -6,6 +6,8 @@
   
   var ex_parseInt = function(x) {return parseInt(x, 10)};
   var ex_parseFloat = function(x) {return parseFloat(x)};
+  var ex_parseHex = function(x) {return parseInt(x, 16)};
+  var ex_parseBin = function(x) {return parseInt(x, 2)};
   
   var ex_myAdd = function(a,b){return a+b;}
   var ex_mySub = function(a,b){return a-b;}
@@ -28,6 +30,7 @@
   	var result = NaN;
     if (typeof Math[fnName] !== 'undefined') {
     	result = Math[fnName](fnArg);
+        return result;
 	}
     if (typeof ex_functions[fnName] !== 'undefined') {
       var argList = ex_functions[fnName].arg.split(',');
@@ -40,6 +43,15 @@
       expr += ex_functions[fnName].expr;
       var ans = peg$parse(expr);
       result = ans.results[len];
+      return result;
+    }
+    if (fnName === "hex") {
+    	var value = parseInt(fnArg, 10);
+    	return "0x" + value.toString(16);;
+    }
+    if (fnName === "bin") {
+    	var value = parseInt(fnArg, 10);
+    	return "0b" + value.toString(2);;
     }
     return (result);
   }
@@ -132,7 +144,8 @@ Power =
 
 Parallel = 
   "(" _ expr:Expression _ ")" { return expr; }
-  / Number / Integer / FnValue / AnsValue / VarValue
+  / Hexadecimal / Binary / Number / Integer 
+  / FnValue / AnsValue / VarValue
 
 Number "number" = 
   _ ([-]*[0-9]*[\.][0-9]*) {
@@ -142,6 +155,16 @@ Number "number" =
 Integer "integer" = 
   _ [0-9]+ {
   	return ex_parseInt(text());
+  }
+  
+Hexadecimal "hexadecimal" =
+  _ "0x"[0-9a-fA-F]+ {
+  	return ex_parseHex(text());
+  }
+  
+Binary "binary" =
+  _ "0b"bin:[0-1]+ {
+  	return ex_parseBin(bin.join(""));
   }
   
 _ "whitespace" = 
