@@ -15,7 +15,7 @@ export class AppComponent {
   
   onChange() {
     let parsed = parser.parse(this.input);
-    console.log(parsed);
+    //console.log(parsed);
     
     this.output = "";
     parsed.results.forEach(element => {

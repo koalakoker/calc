@@ -30,7 +30,19 @@
   	var result = NaN;
     if (typeof Math[fnName] !== 'undefined') {
     	result = Math[fnName](fnArg);
-	} 
+	}
+    if (typeof ex_functions[fnName] !== 'undefined') {
+      var argList = ex_functions[fnName].arg.split(',');
+      var expr = "";
+      if (argList.length != fnArg.length) return NaN;
+      var len = argList.length;
+      for (var i = 0; i < len; i++) {
+        expr += argList[i] + "=" + fnArg[i] +"\n"; 
+      }
+      expr += ex_functions[fnName].expr;
+      var ans = peg$parse(expr);
+      result = ans.results[len];
+    }
     return (result);
   }
   
@@ -151,7 +163,7 @@ VarValue "var value" =
   / [A-Za-z]* {return getVarValue(text());}
  
 FnValue "function value" = 
-  _ fnName:Name _ [(] _ fnArg:Expression _ [)] {
+  _ fnName:Name _ [(] _ fnArg:ExpressionList _ [)] {
   return ex_fn(fnName, fnArg);
 }
   
@@ -164,6 +176,16 @@ VarList "Variable list" =
   _ Name _ ("," _ Name)* {
  return text();
  }
+ 
+ExpressionList "Expression list" = 
+  _ head:Expression _ tail:("," _ Expression)* {
+  var retList = [];
+  retList.push(head);
+  tail.forEach(element => {
+    retList.push(element[2]);
+  });
+  return retList;
+}
   
 FnExpr "Function expression" = 
   [^\n\r]+ {return text();}
