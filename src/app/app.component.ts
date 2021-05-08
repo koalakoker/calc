@@ -1,36 +1,9 @@
 import { Component } from '@angular/core';
-import * as parser from './parser/rules';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'calc';
-  input: string = "";
-  ans: string = "";
-  vars: string = "";
-  functions: string = "";
-  
-  onChange() {
-    let parsed = parser.parse(this.input);
-    //console.log(parsed);
-    
-    this.ans = "";
-    parsed.results.forEach((element,index) => {
-      this.ans += "[" + index + "]: " + element + "\n";
-    });
 
-    this.vars = "";
-    for (const [key] of Object.entries(parsed.vars)) {
-      this.vars += key + '=' + parsed.vars[key].value + "\n";
-    };
-
-    this.functions = "";
-    for (const [key] of Object.entries(parsed.functions)) {
-      let value = parsed.functions[key];
-      this.functions += key + "(" + value.arg + ')=' + value.expr + "\n";
-    };
-  }
 }
