@@ -36,5 +36,13 @@ export class SingleBoxComponent {
     if (key.code === "ArrowDown") {
       console.log("ArrowDown");
     }
+    if ((this.input.length === 1) && (this.toBeParsed !== "")) {
+      let char = this.input[0];
+      if ((char === '+') || (char === '-') ||
+          (char === '*') || (char === '/') ||
+          (char === '^') || (char === ':')) {
+          this.input = "ans" + char;
+      }
+    }
   }
 }
