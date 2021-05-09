@@ -12,6 +12,8 @@ export class SingleBoxComponent {
   input: string = "";
   output: string = "";
   toBeParsed: string = "";
+  inputList: Array<string> = [];
+  inputListSelected: number = -1;
 
   constructor() {
     setTimeout(() => {
@@ -26,15 +28,28 @@ export class SingleBoxComponent {
         this.toBeParsed += "\n";
       }
       this.toBeParsed += this.input;
+      this.inputList.push(this.input);
+      this.inputListSelected = -1;
+
       this.input = "";
       let parsed = parser.parse(this.toBeParsed);
       this.output += "  ans = " + parsed.vars["ans"].value + "\n\n";
     }
     if (key.code === "ArrowUp") {
-      console.log("ArrowUp");
+      if (this.inputListSelected === -1) {
+        this.inputListSelected = this.inputList.length - 1;
+      } else if (this.inputListSelected > 0) {
+        this.inputListSelected -= 1;
+      }
+      this.input = this.inputList[this.inputListSelected];
     }
     if (key.code === "ArrowDown") {
-      console.log("ArrowDown");
+      if (this.inputListSelected !== -1) {
+        if (this.inputListSelected < this.inputList.length - 1) {
+          this.inputListSelected += 1;
+          this.input = this.inputList[this.inputListSelected];
+        }
+      }
     }
     if ((this.input.length === 1) && (this.toBeParsed !== "")) {
       let char = this.input[0];
