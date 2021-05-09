@@ -105,6 +105,9 @@ Input = ans:( FnAssign / VarAssign /
 
 Expression = 
   head:Term tail:(_ ("+" / "-") _ Term)* {
+  	if (isNaN(head)) {
+    	head = 0;
+    }
     var ans = tail.reduce(function(result, element) {
       if (element[1] === "+") {
         return ex_myAdd(result, element[3]); 

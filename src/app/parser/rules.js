@@ -158,6 +158,9 @@ function peg$parse(input, options) {
       peg$c4 = "-",
       peg$c5 = peg$literalExpectation("-", false),
       peg$c6 = function(head, tail) {
+        	if (isNaN(head)) {
+          	head = 0;
+          }
           var ans = tail.reduce(function(result, element) {
             if (element[1] === "+") {
               return ex_myAdd(result, element[3]); 
