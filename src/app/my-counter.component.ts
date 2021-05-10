@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { reset, addCommand } from './counter.actions';
 import { AppState } from './State/appState';
@@ -10,10 +10,9 @@ import { selectOutput } from './counter.selector';
   templateUrl: './my-counter.component.html'
 })
 export class MyCounterComponent {
-  state$: Observable<String>;
+  state$: Observable<String> = this.store.select(selectOutput);
 
-  constructor(private store: Store<AppState>) {
-    this.state$ = store.select(selectOutput);
+  constructor(private store: Store) {
   }
 
   reset() {

@@ -26,7 +26,7 @@ import { environment } from 'src/environments/environment';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    StoreModule.forRoot({ root: counterReducer }),
+    StoreModule.forRoot({ state: counterReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],

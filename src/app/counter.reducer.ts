@@ -12,7 +12,6 @@ export const initialState: AppState = {
 const _counterReducer = createReducer(
   initialState,
   on(reset, (state) => {
-    console.log(initialState.output);
     return initialState
   }),
   on(addCommand, (state: AppState) => {
@@ -22,7 +21,6 @@ const _counterReducer = createReducer(
       inputList: [],
       inputListSelected: -1
     };
-    console.log(newState.output);
     return newState;
   })
 );
