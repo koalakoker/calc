@@ -9,8 +9,13 @@ import { SingleBoxComponent } from './single-box/single-box.component';
 import { DebugComponent } from './debug/debug.component';
 
 import { StoreModule } from '@ngrx/store';
-import { counterReducer } from './counter.reducer';
-import { MyCounterComponent } from './my-counter.component';
+import { booksReducer } from './State/books.reducer';
+import { collectionReducer} from './State/collection.reducer'
+import { BookCollectionComponent } from './book-list/book-collection.component';
+import { BookListComponent } from './book-list/book-list.component';
+import { HttpClientModule } from '@angular/common/http';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -18,13 +23,16 @@ import { MyCounterComponent } from './my-counter.component';
     FourBoxComponent,
     SingleBoxComponent,
     DebugComponent,
-    MyCounterComponent
+    BookListComponent,
+    BookCollectionComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    StoreModule.forRoot({ state: counterReducer })
+    HttpClientModule,
+    StoreModule.forRoot({ books: booksReducer, collection: collectionReducer }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
