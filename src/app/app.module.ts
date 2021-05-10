@@ -8,17 +8,23 @@ import { FourBoxComponent } from './four-box/four-box.component';
 import { SingleBoxComponent } from './single-box/single-box.component';
 import { DebugComponent } from './debug/debug.component';
 
+import { StoreModule } from '@ngrx/store';
+import { counterReducer } from './counter.reducer';
+import { MyCounterComponent } from './my-counter.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     FourBoxComponent,
     SingleBoxComponent,
-    DebugComponent
+    DebugComponent,
+    MyCounterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    StoreModule.forRoot({ state: counterReducer })
   ],
   providers: [],
   bootstrap: [AppComponent]
