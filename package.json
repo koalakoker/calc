@@ -19,15 +19,17 @@
     "@ngrx/store": "^11.1.1",
     "@ngrx/store-devtools": "^11.1.1",
     "decimal.js": "^3.0.0",
+    "lodash": "^4.17.21",
     "ngx-webstorage-service": "^4.1.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1101.2",
+    "@angular-devkit/build-angular": "^0.901.15",
     "@angular/cli": "~11.1.2",
     "@angular/compiler-cli": "~11.1.1",
+    "@types/lodash": "^4.14.168",
     "@types/node": "^12.11.1",
     "typescript": "~4.1.2"
   }

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { reset, addCommand } from './counter.actions';
+import { reset, addCommand } from './State/state.actions';
 import { AppState } from './State/appState';
-import { selectOutput } from './counter.selector';
+import { selectOutput } from './State/state.selector';
 
 @Component({
   selector: 'app-my-counter',

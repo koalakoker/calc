@@ -1,7 +1,8 @@
 <table>
   <tr>
     <td>
-      <textarea [(ngModel)]="output" rows="25" cols="25">
+      <textarea rows="25" cols="25">
+        {{output$ | async}}
       </textarea>
     </td>
   </tr>

@@ -9,8 +9,7 @@ import { SingleBoxComponent } from './single-box/single-box.component';
 import { DebugComponent } from './debug/debug.component';
 
 import { StoreModule } from '@ngrx/store';
-import { counterReducer } from './counter.reducer';
-import { MyCounterComponent } from './my-counter.component';
+import { counterReducer } from './State/state.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 
@@ -19,8 +18,7 @@ import { environment } from 'src/environments/environment';
     AppComponent,
     FourBoxComponent,
     SingleBoxComponent,
-    DebugComponent,
-    MyCounterComponent
+    DebugComponent
   ],
   imports: [
     BrowserModule,
