@@ -3,7 +3,8 @@ import { ElementRef, ViewChild } from '@angular/core';
 import { LocalStoreService } from '../Services/local-store.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../State/appState';
-import * as Action from '../State/state.actions'
+import * as Action from '../State/state.actions';
+import * as HistoryAction from '../History/history.actions';
 import { Observable } from 'rxjs';
 import * as Selector from '../State/state.selector'
 @Component({
@@ -20,15 +21,17 @@ export class SingleBoxComponent {
   toBeParsed$       : Observable<string>                = this.store.select(Selector.selectToBeParsed);
   inputList$        : Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
   inputListSelected$: Observable<number>                = this.store.select(Selector.selectInputListSelected);
+  state$            : Observable<AppState>              = this.store.select(Selector.selectState);
 
   output            : string;
   inputListSelected : number;
   inputList         : ReadonlyArray<string>;
   toBeParsed        : string;
-
+  state             : AppState;
+  
   constructor(
     private localStoreService: LocalStoreService,
-    private store: Store) {
+    private store: Store) {    
     setTimeout(() => {
       this.load();
       this.inputBox.nativeElement.focus();
@@ -47,6 +50,9 @@ export class SingleBoxComponent {
     this.toBeParsed$.subscribe((str: string) => {
       this.toBeParsed = str;
     })
+    this.state$.subscribe((state: AppState) => {
+      this.state = state;
+    })
   }
 
   onChange(key) {
@@ -54,8 +60,9 @@ export class SingleBoxComponent {
       if (this.input === "clear") {
         this.store.dispatch(Action.resetState());
       } else {
-        this.store.dispatch(Action.addStringToParser({str: this.input}))
+        this.store.dispatch(Action.addStringToParser({str: this.input}));
       }
+      this.store.dispatch(HistoryAction.historyAdd(this.state));
       this.input = "";
       this.save();
     }
@@ -77,6 +84,14 @@ export class SingleBoxComponent {
     }
   }
 
+  undo() {
+    this.store.dispatch(HistoryAction.historyUndo());
+  }
+
+  redo() {
+    this.store.dispatch(HistoryAction.historyRedo());
+  }
+
   save() {
     this.localStoreService.setKey("output", this.output);
     this.localStoreService.setKey("toBeParsed", this.toBeParsed);
@@ -91,5 +106,6 @@ export class SingleBoxComponent {
       inputListSelected : -1
     }
     this.store.dispatch(Action.setState(state));
+    this.store.dispatch(HistoryAction.historyAdd(this.state));
   }
 }

@@ -30,15 +30,13 @@ const _counterReducer = createReducer(
     let parsed = parser.parse(newState.toBeParsed);
     newState.output += "  ans = " + parsed.vars["ans"].value + "\n\n";
     
-    console.log(newState);
-
     return newState;
   }),
   on(Action.setState, (state: AppState, newState: AppState) => {
     return newState;
   }),
   on(Action.selectPrevious, (state: AppState) => {
-    let newState: AppState = state;
+    let newState: AppState = _.cloneDeep(state);
     if (newState.inputListSelected === -1) {
       newState.inputListSelected = newState.inputList.length - 1;
     } else if (newState.inputListSelected > 0) {
@@ -47,7 +45,7 @@ const _counterReducer = createReducer(
     return newState;
   }),
   on(Action.selectNext, (state: AppState) => {
-    let newState: AppState = state;
+    let newState: AppState = _.cloneDeep(state);
     if (newState.inputListSelected !== -1) {
       if (newState.inputListSelected < newState.inputList.length - 1) {
         newState.inputListSelected += 1;

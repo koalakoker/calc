@@ -1,6 +1,11 @@
 import { createSelector } from "@ngrx/store";
 import { AppState } from "./appState";
 
+export const selectState = createSelector(
+  (state: AppState) => state,
+  (state: AppState) => state["history"]
+);
+
 export const selectOutput = createSelector(
   (state: AppState) => state["state"].output,
   (output: string ) => output

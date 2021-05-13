@@ -12,6 +12,7 @@ import { StoreModule } from '@ngrx/store';
 import { counterReducer } from './State/state.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
+import { historyReducer } from './History/history.reducer';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import { environment } from 'src/environments/environment';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    StoreModule.forRoot({ state: counterReducer }),
+    StoreModule.forRoot({ state: counterReducer, history: historyReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
