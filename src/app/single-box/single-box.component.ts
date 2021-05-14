@@ -4,9 +4,9 @@ import { LocalStoreService } from '../Services/local-store.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../State/appState';
 import * as Action from '../State/state.actions';
-import * as HistoryAction from '../History/history.actions';
 import { Observable } from 'rxjs';
 import * as Selector from '../State/state.selector'
+import * as parser from '../parser/rules';
 @Component({
   selector: 'single-box',
   templateUrl: './single-box.component.html',
@@ -17,11 +17,7 @@ export class SingleBoxComponent {
   input: string = "";
   
   // State observers
-  output$           : Observable<String>                = this.store.select(Selector.selectOutput);
-  toBeParsed$       : Observable<string>                = this.store.select(Selector.selectToBeParsed);
   inputList$        : Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
-  inputListSelected$: Observable<number>                = this.store.select(Selector.selectInputListSelected);
-  state$            : Observable<AppState>              = this.store.select(Selector.selectState);
 
   output            : string;
   inputListSelected : number;
@@ -38,20 +34,26 @@ export class SingleBoxComponent {
     }, 100);
 
     // Register subscriber
-    this.output$.subscribe((str: string) => {
-      this.output = str;
-    })
-    this.inputListSelected$.subscribe((index: number) => {
-      this.inputListSelected = index;
-    });
     this.inputList$.subscribe((list: ReadonlyArray<string>) => {
       this.inputList = list;
+      this.update(list);
     });
-    this.toBeParsed$.subscribe((str: string) => {
-      this.toBeParsed = str;
-    })
-    this.state$.subscribe((state: AppState) => {
-      this.state = state;
+  }
+
+  update(inputList: ReadonlyArray<string>) {
+    this.output = "";
+    this.toBeParsed = "";
+    inputList.forEach(str => {
+      this.output += str + "\n";
+      if (this.toBeParsed !== "") {
+        this.toBeParsed += "\n";
+      }
+      this.toBeParsed += str;
+      
+      //this.inputListSelected = -1;
+      
+      let parsed = parser.parse(this.toBeParsed);
+      this.output += "  ans = " + parsed.vars["ans"].value + "\n\n";
     })
   }
 
@@ -62,16 +64,23 @@ export class SingleBoxComponent {
       } else {
         this.store.dispatch(Action.addStringToParser({str: this.input}));
       }
-      this.store.dispatch(HistoryAction.historyAdd(this.state));
       this.input = "";
       this.save();
     }
     if (key.code === "ArrowUp") {
-      this.store.dispatch(Action.selectPrevious());
+      if (this.inputListSelected === -1) {
+        this.inputListSelected = this.inputList.length - 1;
+      } else if (this.inputListSelected > 0) {
+        this.inputListSelected -= 1;
+      }
       this.input = this.inputList[this.inputListSelected];
     }
     if (key.code === "ArrowDown") {
-      this.store.dispatch(Action.selectNext());
+      if (this.inputListSelected !== -1) {
+        if (this.inputListSelected < this.inputList.length - 1) {
+          this.inputListSelected += 1;
+        }
+      }
       this.input = this.inputList[this.inputListSelected];
     }
     if ((this.input.length === 1) && (this.toBeParsed !== "")) {
@@ -85,27 +94,21 @@ export class SingleBoxComponent {
   }
 
   undo() {
-    this.store.dispatch(HistoryAction.historyUndo());
+    this.store.dispatch(Action.historyUndo());
   }
 
   redo() {
-    this.store.dispatch(HistoryAction.historyRedo());
+    this.store.dispatch(Action.historyRedo());
   }
 
   save() {
-    this.localStoreService.setKey("output", this.output);
-    this.localStoreService.setKey("toBeParsed", this.toBeParsed);
     this.localStoreService.setKey("inputList", this.inputList.join(';'));
   }
 
   load() {
     let state: AppState = {
-      output: this.localStoreService.getKey("output"),
-      toBeParsed: this.localStoreService.getKey("toBeParsed"),
       inputList : this.localStoreService.getKey("inputList").split(';'),
-      inputListSelected : -1
     }
     this.store.dispatch(Action.setState(state));
-    this.store.dispatch(HistoryAction.historyAdd(this.state));
   }
 }
