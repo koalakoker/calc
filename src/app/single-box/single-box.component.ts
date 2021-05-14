@@ -94,10 +94,12 @@ export class SingleBoxComponent {
 
   undo() {
     this.store.dispatch(Action.historyUndo());
+    this.inputListSelected = -1;
   }
 
   redo() {
     this.store.dispatch(Action.historyRedo());
+    this.inputListSelected = -1;
   }
 
   save() {
@@ -105,9 +107,9 @@ export class SingleBoxComponent {
   }
 
   load() {
-    let state: AppState = {
-      inputList : this.localStoreService.getKey("inputList").split(';'),
-    }
-    this.store.dispatch(Action.setState(state));
+    let inputList = this.localStoreService.getKey("inputList").split(';');
+    inputList.forEach( str => {
+      this.store.dispatch(Action.addStringToParser({str: str}));
+    });
   }
 }

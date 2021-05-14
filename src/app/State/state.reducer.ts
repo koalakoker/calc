@@ -40,18 +40,6 @@ const _counterReducer = createReducer(
     historyAddState(newState);
     return newState;
   }),
-  on(Action.setState, (state: AppState, newState: AppState) => {
-    historyAddState(newState);
-    return newState;
-  }),
-  on(Action.historyReset, (state: AppState) => {
-    history = {
-      past: [],
-      present: state,
-      future: []
-    }
-    return state
-  }),
   on(Action.historyUndo, (state: AppState) => {
     if (history.past.length > 0) {
     // use first past state as next present ...
