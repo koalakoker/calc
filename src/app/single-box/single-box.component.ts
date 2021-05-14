@@ -20,7 +20,7 @@ export class SingleBoxComponent {
   inputList$        : Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
 
   output            : string;
-  inputListSelected : number;
+  inputListSelected : number = -1;
   inputList         : ReadonlyArray<string>;
   toBeParsed        : string;
   state             : AppState;
@@ -49,9 +49,7 @@ export class SingleBoxComponent {
         this.toBeParsed += "\n";
       }
       this.toBeParsed += str;
-      
-      //this.inputListSelected = -1;
-      
+
       let parsed = parser.parse(this.toBeParsed);
       this.output += "  ans = " + parsed.vars["ans"].value + "\n\n";
     })
@@ -65,6 +63,7 @@ export class SingleBoxComponent {
         this.store.dispatch(Action.addStringToParser({str: this.input}));
       }
       this.input = "";
+      this.inputListSelected = -1;
       this.save();
     }
     if (key.code === "ArrowUp") {
