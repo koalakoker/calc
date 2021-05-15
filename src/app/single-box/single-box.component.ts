@@ -57,30 +57,16 @@ export class SingleBoxComponent {
 
   onChange(key) {
     if (key.code === "Enter") {
-      if (this.input === "clear") {
-        this.store.dispatch(Action.resetState());
-      } else {
-        this.store.dispatch(Action.addStringToParser({str: this.input}));
-      }
-      this.input = "";
-      this.inputListSelected = -1;
-      this.save();
+      this.enter();
     }
     if (key.code === "ArrowUp") {
-      if (this.inputListSelected === -1) {
-        this.inputListSelected = this.inputList.length - 1;
-      } else if (this.inputListSelected > 0) {
-        this.inputListSelected -= 1;
-      }
-      this.input = this.inputList[this.inputListSelected];
+      this.up();
     }
     if (key.code === "ArrowDown") {
-      if (this.inputListSelected !== -1) {
-        if (this.inputListSelected < this.inputList.length - 1) {
-          this.inputListSelected += 1;
-        }
-      }
-      this.input = this.inputList[this.inputListSelected];
+      this.down();
+    }
+    if (key.code === "Escape") {
+      this.clearInput();
     }
     if ((this.input.length === 1) && (this.toBeParsed !== "")) {
       let char = this.input[0];
@@ -90,10 +76,43 @@ export class SingleBoxComponent {
           this.input = "ans" + char;
       }
     }
-    if (key.code === "Escape") {
-      this.input = "";
-      this.inputListSelected = -1;
+  }
+
+  enter() {
+    this.newInput(this.input);
+    this.clearInput();
+    this.save();
+  }
+
+  newInput(input: string) {
+    if (input === "clear") {
+      this.store.dispatch(Action.resetState());
+    } else {
+      this.store.dispatch(Action.addStringToParser({ str: input }));
     }
+  }
+
+  clearInput() {
+    this.input = "";
+    this.inputListSelected = -1;
+  }
+
+  up() {
+    if (this.inputListSelected === -1) {
+      this.inputListSelected = this.inputList.length - 1;
+    } else if (this.inputListSelected > 0) {
+      this.inputListSelected -= 1;
+    }
+    this.input = this.inputList[this.inputListSelected];
+  }
+
+  down() {
+    if (this.inputListSelected !== -1) {
+      if (this.inputListSelected < this.inputList.length - 1) {
+        this.inputListSelected += 1;
+      }
+    }
+    this.input = this.inputList[this.inputListSelected];
   }
 
   undo() {

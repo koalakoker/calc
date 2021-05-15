@@ -9,8 +9,16 @@
   <tr>
     <td>
       <input #inputBox [(ngModel)]="input" (keyup)="onChange($event)" size="25">
+    </td>
+  </tr>
+  <tr>
+    <td>
       <button (click)="undo()">Undo</button>
       <button (click)="redo()">Redo</button>
+      <button (click)="up()">Up</button>
+      <button (click)="down()">Down</button>
+      <button (click)="enter()">Enter</button>
+      <button (click)="clearInput()">Esc</button>
     </td>
   </tr>
 </table>
