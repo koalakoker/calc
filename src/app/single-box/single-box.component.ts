@@ -90,6 +90,10 @@ export class SingleBoxComponent {
           this.input = "ans" + char;
       }
     }
+    if (key.code === "Escape") {
+      this.input = "";
+      this.inputListSelected = -1;
+    }
   }
 
   undo() {
