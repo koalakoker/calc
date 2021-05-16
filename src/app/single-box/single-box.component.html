@@ -1,26 +1,26 @@
-<table>
+<table style="background-color: aquamarine;">
   <tr>
-    <td>
-      <mat-form-field style="width: 350px;">
+    <td align="center">
+      <mat-form-field class="calc-outbox">
         <textarea #textarea matInput rows="25">{{output}}</textarea>
       </mat-form-field>
     </td>
   </tr>
   <tr>
-    <td>
-      <mat-form-field style="width: 350px;">
-        <input #inputBox matInput placeholder="input expression" [(ngModel)]="input" (keyup)="onChange($event)" size="25">
-      </mat-form-field>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <button mat-raised-button (click)="undo()">Undo</button>
-      <button mat-raised-button (click)="redo()">Redo</button>
-      <button mat-raised-button (click)="up()">Up</button>
-      <button mat-raised-button (click)="down()">Down</button>
-      <button mat-raised-button (click)="enter()">Enter</button>
-      <button mat-raised-button (click)="clearInput()">Esc</button>
-    </td>
-  </tr>
+  <td align="center">
+    <mat-form-field class="calc-outbox">
+      <input #inputBox matInput placeholder="input expression" [(ngModel)]="input" (keyup)="onChange($event)" size="25">
+    </mat-form-field>
+  </td>
+</tr>
+<tr>
+  <td>
+    <button mat-raised-button (click)="undo()">Undo</button>
+    <button mat-raised-button (click)="redo()">Redo</button>
+    <button mat-raised-button (click)="up()">Up</button>
+    <button mat-raised-button (click)="down()">Down</button>
+    <button mat-raised-button (click)="enter()">Enter</button>
+    <button mat-raised-button (click)="clearInput()">Esc</button>
+  </td>
+</tr>
 </table>
