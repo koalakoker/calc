@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppComponent } from './app.component';
 import { FourBoxComponent } from './four-box/four-box.component';
@@ -37,7 +38,8 @@ import { MainTabComponent } from './main-tab/main-tab.component';
     MatInputModule,
     MatButtonModule,
     MatTabsModule,
-    MatGridListModule
+    MatGridListModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

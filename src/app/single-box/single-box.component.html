@@ -1,4 +1,4 @@
-<table style="background-color: aquamarine;">
+<table>
   <tr>
     <td align="center">
       <mat-form-field class="calc-outbox">
@@ -15,12 +15,14 @@
 </tr>
 <tr>
   <td>
-    <button mat-raised-button (click)="undo()">Undo</button>
-    <button mat-raised-button (click)="redo()">Redo</button>
-    <button mat-raised-button (click)="up()">Up</button>
-    <button mat-raised-button (click)="down()">Down</button>
-    <button mat-raised-button (click)="enter()">Enter</button>
-    <button mat-raised-button (click)="clearInput()">Esc</button>
+    <div class="button-row">
+      <button mat-mini-fab color="primary" (click)="undo()"><mat-icon>undo</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="redo()"><mat-icon>redo</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="up()"><mat-icon>arrow_upward</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="down()"><mat-icon>arrow_downward</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="enter()"><mat-icon>keyboard_return</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="clearInput()"><mat-icon>clear</mat-icon></button>
+    </div>
   </td>
 </tr>
 </table>
