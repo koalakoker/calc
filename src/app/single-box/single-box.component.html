@@ -1,22 +1,26 @@
 <table>
   <tr>
     <td>
-      <textarea rows="25" cols="25">{{output}}</textarea>
+      <mat-form-field style="width: 350px;">
+        <textarea #textarea matInput rows="25">{{output}}</textarea>
+      </mat-form-field>
     </td>
   </tr>
   <tr>
     <td>
-      <input #inputBox [(ngModel)]="input" (keyup)="onChange($event)" size="25">
+      <mat-form-field style="width: 350px;">
+        <input #inputBox matInput placeholder="input expression" [(ngModel)]="input" (keyup)="onChange($event)" size="25">
+      </mat-form-field>
     </td>
   </tr>
   <tr>
     <td>
-      <button (click)="undo()">Undo</button>
-      <button (click)="redo()">Redo</button>
-      <button (click)="up()">Up</button>
-      <button (click)="down()">Down</button>
-      <button (click)="enter()">Enter</button>
-      <button (click)="clearInput()">Esc</button>
+      <button mat-raised-button (click)="undo()">Undo</button>
+      <button mat-raised-button (click)="redo()">Redo</button>
+      <button mat-raised-button (click)="up()">Up</button>
+      <button mat-raised-button (click)="down()">Down</button>
+      <button mat-raised-button (click)="enter()">Enter</button>
+      <button mat-raised-button (click)="clearInput()">Esc</button>
     </td>
   </tr>
 </table>

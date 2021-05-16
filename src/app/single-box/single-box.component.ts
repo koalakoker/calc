@@ -14,6 +14,7 @@ import * as parser from '../parser/rules';
 })
 export class SingleBoxComponent {
   @ViewChild('inputBox') inputBox: ElementRef;
+  @ViewChild('textarea') textArea: ElementRef;
   input: string = "";
   
   // State observers
@@ -50,9 +51,23 @@ export class SingleBoxComponent {
       }
       this.toBeParsed += str;
 
-      let parsed = parser.parse(this.toBeParsed);
-      this.output += "  ans = " + parsed.vars["ans"].value + "\n\n";
+      try {
+        let parsed = parser.parse(this.toBeParsed);
+        this.output += "  ans = " + parsed.vars["ans"].value + "\n\n";
+      } catch (error) {
+        console.log(error);
+        this.output += "  " + error.name + "\n\n";
+        this.toBeParsed = this.removeLastExpression(this.toBeParsed);
+      }
     })
+    
+    this.updateTextArea();
+  }
+
+  removeLastExpression(toBeParsed: string): string {
+    var toBePrasedList = toBeParsed.split("\n");
+    toBePrasedList.pop();
+    return toBePrasedList.join("\n");
   }
 
   onChange(key) {
@@ -118,11 +133,13 @@ export class SingleBoxComponent {
   undo() {
     this.store.dispatch(Action.historyUndo());
     this.inputListSelected = -1;
+    this.save();
   }
 
   redo() {
     this.store.dispatch(Action.historyRedo());
     this.inputListSelected = -1;
+    this.save();
   }
 
   save() {
@@ -134,5 +151,13 @@ export class SingleBoxComponent {
     inputList.forEach( str => {
       this.store.dispatch(Action.addStringToParser({str: str}));
     });
+  }
+
+  updateTextArea() {
+    if (this.textArea) {
+      setTimeout(() => {
+        this.textArea.nativeElement.scrollTop = this.textArea.nativeElement.scrollHeight;
+      }, 100);
+    }
   }
 }
