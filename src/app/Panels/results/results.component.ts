@@ -3,12 +3,13 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as Selector from '../../State/state.selector';
 import { parse } from '../../Parser/parser';
+
 @Component({
-  selector: 'app-functions',
-  templateUrl: './functions.component.html',
+  selector: 'app-results',
+  templateUrl: './results.component.html',
   styleUrls: ['../panels.component.css']
 })
-export class FunctionsComponent {
+export class ResultsComponent {
   // State observers
   inputList$: Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
   output: string = "";
@@ -21,6 +22,7 @@ export class FunctionsComponent {
   }
 
   update(inputList: ReadonlyArray<string>) {
-    this.output = parse(inputList).functions;
+    this.output = parse(inputList).results;
   }
+
 }

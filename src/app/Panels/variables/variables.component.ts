@@ -11,9 +11,7 @@ import { parse } from '../../Parser/parser';
 export class VariablesComponent {
   // State observers
   inputList$: Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
-
-  output    : string = "";
-  toBeParsed: string = "";
+  output: string = "";
 
   constructor(private store: Store) {
     // Register subscriber

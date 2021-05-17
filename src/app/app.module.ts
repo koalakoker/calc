@@ -21,6 +21,7 @@ import { environment } from 'src/environments/environment';
 import { MainTabComponent } from './main-tab/main-tab.component';
 import { VariablesComponent } from './Panels/variables/variables.component';
 import { FunctionsComponent } from './Panels/functions/functions.component';
+import { ResultsComponent } from './Panels/results/results.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { FunctionsComponent } from './Panels/functions/functions.component';
     DebugComponent,
     MainTabComponent,
     VariablesComponent,
-    FunctionsComponent
+    FunctionsComponent,
+    ResultsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,4 @@
+import { result } from 'lodash';
 import * as parser from './rules';
 
 export function parse(inputList: ReadonlyArray<string>) {
@@ -24,6 +25,7 @@ export function parse(inputList: ReadonlyArray<string>) {
 
   let vars = "";
   let functions = "";
+  let results = "";
   if (lastParsed !== undefined) {
     for (const [key] of Object.entries(lastParsed.vars)) {
       vars += key + '=' + lastParsed.vars[key].value + "\n";
@@ -33,12 +35,16 @@ export function parse(inputList: ReadonlyArray<string>) {
       let value = lastParsed.functions[key];
       functions += key + "(" + value.arg + ')=' + value.expr + "\n";
     };
+    lastParsed.results.forEach((element, index) => {
+      results += "[" + index + "]: " + element + "\n";
+    });
   }
 
   return {
     output: output,
     vars: vars,
-    functions: functions
+    functions: functions,
+    results: results
   }
 }
 
