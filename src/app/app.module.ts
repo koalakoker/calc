@@ -19,6 +19,8 @@ import { DebugComponent } from './Panels/debug/debug.component';
 import { counterReducer } from './State/state.reducer';
 import { environment } from 'src/environments/environment';
 import { MainTabComponent } from './main-tab/main-tab.component';
+import { VariablesComponent } from './Panels/variables/variables.component';
+import { FunctionsComponent } from './Panels/functions/functions.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { MainTabComponent } from './main-tab/main-tab.component';
     FourBoxComponent,
     SingleBoxComponent,
     DebugComponent,
-    MainTabComponent
+    MainTabComponent,
+    VariablesComponent,
+    FunctionsComponent
   ],
   imports: [
     BrowserModule,

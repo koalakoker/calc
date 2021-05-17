@@ -10,8 +10,10 @@ import * as parser from '../../Parser/rules';
 @Component({
   selector: 'single-box',
   templateUrl: './single-box.component.html',
-  styleUrls: ['./single-box.component.css']
-})
+  styleUrls: [
+    '../panels.component.css',
+    './single-box.component.css'
+  ]})
 export class SingleBoxComponent {
   @ViewChild('inputBox') inputBox: ElementRef;
   @ViewChild('textarea') textArea: ElementRef;
