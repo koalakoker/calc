@@ -72,6 +72,14 @@ export class SingleBoxComponent {
     return toBePrasedList.join("\n");
   }
 
+  updateTextArea() {
+    if (this.textArea) {
+      setTimeout(() => {
+        this.textArea.nativeElement.scrollTop = this.textArea.nativeElement.scrollHeight;
+      }, 100);
+    }
+  }
+
   onChange(key) {
     if (key.code === "Enter") {
       this.enter();
@@ -153,13 +161,5 @@ export class SingleBoxComponent {
     inputList.forEach( str => {
       this.store.dispatch(Action.addStringToParser({str: str}));
     });
-  }
-
-  updateTextArea() {
-    if (this.textArea) {
-      setTimeout(() => {
-        this.textArea.nativeElement.scrollTop = this.textArea.nativeElement.scrollHeight;
-      }, 100);
-    }
   }
 }
