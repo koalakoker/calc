@@ -5,8 +5,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../State/appState';
 import * as Action from '../../State/state.actions';
 import { Observable } from 'rxjs';
-import * as Selector from '../../State/state.selector'
-import * as parser from '../../Parser/rules';
+import * as Selector from '../../State/state.selector';
+import { parse } from '../../Parser/parser';
 @Component({
   selector: 'single-box',
   templateUrl: './single-box.component.html',
@@ -44,32 +44,8 @@ export class SingleBoxComponent {
   }
 
   update(inputList: ReadonlyArray<string>) {
-    this.output = "";
-    this.toBeParsed = "";
-    inputList.forEach(str => {
-      this.output += str + "\n";
-      if (this.toBeParsed !== "") {
-        this.toBeParsed += "\n";
-      }
-      this.toBeParsed += str;
-
-      try {
-        let parsed = parser.parse(this.toBeParsed);
-        this.output += "  ans = " + parsed.vars["ans"].value + "\n\n";
-      } catch (error) {
-        console.log(error);
-        this.output += "  " + error.name + "\n\n";
-        this.toBeParsed = this.removeLastExpression(this.toBeParsed);
-      }
-    })
-    
+    this.output = parse(inputList).output;
     this.updateTextArea();
-  }
-
-  removeLastExpression(toBeParsed: string): string {
-    var toBePrasedList = toBeParsed.split("\n");
-    toBePrasedList.pop();
-    return toBePrasedList.join("\n");
   }
 
   updateTextArea() {
