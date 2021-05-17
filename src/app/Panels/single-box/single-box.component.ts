@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { ElementRef, ViewChild } from '@angular/core';
-import { LocalStoreService } from '../Services/local-store.service';
+import { LocalStoreService } from '../../Services/local-store.service';
 import { Store } from '@ngrx/store';
-import { AppState } from '../State/appState';
-import * as Action from '../State/state.actions';
+import { AppState } from '../../State/appState';
+import * as Action from '../../State/state.actions';
 import { Observable } from 'rxjs';
-import * as Selector from '../State/state.selector'
-import * as parser from '../parser/rules';
+import * as Selector from '../../State/state.selector'
+import * as parser from '../../Parser/rules';
 @Component({
   selector: 'single-box',
   templateUrl: './single-box.component.html',

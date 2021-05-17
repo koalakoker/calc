@@ -12,9 +12,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AppComponent } from './app.component';
-import { FourBoxComponent } from './four-box/four-box.component';
-import { SingleBoxComponent } from './single-box/single-box.component';
-import { DebugComponent } from './debug/debug.component';
+import { FourBoxComponent } from './Panels/four-box/four-box.component';
+import { SingleBoxComponent } from './Panels/single-box/single-box.component';
+import { DebugComponent } from './Panels/debug/debug.component';
 
 import { counterReducer } from './State/state.reducer';
 import { environment } from 'src/environments/environment';

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as parser from '../parser/rules';
+import * as parser from '../../Parser/rules';
 
 @Component({
   selector: 'four-box',
