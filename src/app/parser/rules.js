@@ -3,6 +3,7 @@
  *
  * http://pegjs.org/
  */
+import * as Decimal from '../../../node_modules/decimal.js'
 
 "use strict";
 
@@ -2099,17 +2100,6 @@ function peg$parse(input, options) {
     var ex_variables = {};
     var ex_functions = {};
     
-    var ex_parseInt = function(x) {return parseInt(x, 10)};
-    var ex_parseFloat = function(x) {return parseFloat(x)};
-    var ex_parseHex = function(x) {return parseInt(x, 16)};
-    var ex_parseBin = function(x) {return parseInt(x, 2)};
-    
-    var ex_myAdd = function(a,b){return a+b;}
-    var ex_mySub = function(a,b){return a-b;}
-    var ex_myMul = function(a,b){return a*b;}
-    var ex_myDiv = function(a,b){return a/b;}
-    var ex_myPow = function(a,b){return Math.pow(a,b);}
-    var ex_myPar = function(r1,r2){return ((r1*r2)/(r1+r2));}
     var ex_myPI  = function(){return Math.acos(-1);}
     var ex_myE   = function(){return Math.exp(1); }
     
@@ -2201,7 +2191,17 @@ function peg$parse(input, options) {
   }
 }
 
-module.exports = {
-  SyntaxError: peg$SyntaxError,
-  parse:       peg$parse
-};
+var ex_parseInt = function (x) { return new Decimal(x) };
+var ex_parseFloat = function (x) { return new Decimal(x) };
+var ex_parseHex = function (x) { return new Decimal(x) };
+var ex_parseBin = function (x) { return new Decimal(x) };
+
+var ex_myAdd = function (a, b) { return a.plus(b); }
+var ex_mySub = function (a, b) { return a.minus(b); }
+var ex_myMul = function (a, b) { return a.times(b); }
+var ex_myDiv = function (a, b) { return a.dividedBy(b); }
+var ex_myPow = function (a, b) { return a.toPower(b); }
+var ex_myPar = function (r1, r2) { return r1.times(r2).dividedBy(r1.plus(r2)) }
+
+export var SyntaxError = peg$SyntaxError;
+export var parse = peg$parse;
