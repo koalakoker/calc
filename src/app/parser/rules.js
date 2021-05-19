@@ -3,7 +3,7 @@
  *
  * http://pegjs.org/
  */
-import * as Decimal from '../../../node_modules/decimal.js'
+import { Decimal } from '../../assets/decimal.js/decimal'
 
 "use strict";
 
@@ -2100,9 +2100,6 @@ function peg$parse(input, options) {
     var ex_variables = {};
     var ex_functions = {};
     
-    var ex_myPI  = function(){return Math.acos(-1);}
-    var ex_myE   = function(){return Math.exp(1); }
-    
     var evaluate = function(head, tail) {
     	ans = head;
     	tail.reduce(function(result, element) {
@@ -2113,8 +2110,8 @@ function peg$parse(input, options) {
     
     var ex_fn = function (fnName, fnArg) {
     	var result = NaN;
-      if (typeof Math[fnName] !== 'undefined') {
-      	result = Math[fnName](fnArg);
+      if (typeof Decimal[fnName] !== 'undefined') {
+        result = Decimal[fnName](fnArg.toString());
           return result;
   	}
       if (typeof ex_functions[fnName] !== 'undefined') {
@@ -2143,7 +2140,7 @@ function peg$parse(input, options) {
     
     var ex_fnAssign = function(fnName, fnArg, fnExpr) {
     	var retVal = NaN;
-      if ((typeof Math        [fnName] === 'undefined') && 
+      if ((typeof Decimal     [fnName] === 'undefined') && 
           (typeof ex_functions[fnName] === 'undefined')) {
         ex_functions[fnName] = {};
         ex_functions[fnName].expr = fnExpr;
@@ -2202,6 +2199,8 @@ var ex_myMul = function (a, b) { return a.times(b); }
 var ex_myDiv = function (a, b) { return a.dividedBy(b); }
 var ex_myPow = function (a, b) { return a.toPower(b); }
 var ex_myPar = function (r1, r2) { return r1.times(r2).dividedBy(r1.plus(r2)) }
+var ex_myPI = function () { return new Decimal(-1).acos(); }
+var ex_myE = function () { return new Decimal(1).exp(); }
 
 export var SyntaxError = peg$SyntaxError;
 export var parse = peg$parse;

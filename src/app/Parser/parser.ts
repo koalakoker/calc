@@ -1,4 +1,3 @@
-import { result } from 'lodash';
 import * as parser from './rules';
 
 export function parse(inputList: ReadonlyArray<string>) {
@@ -14,7 +13,7 @@ export function parse(inputList: ReadonlyArray<string>) {
 
     try {
       let parsed = parser.parse(toBeParsed);
-      output += "  ans = " + parsed.vars["ans"].value + "\n\n";
+      output += "  ans=" + parsed.vars["ans"].value + "\n\n";
       lastParsed = parsed;
     } catch (error) {
       console.log(error);
