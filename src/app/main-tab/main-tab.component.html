@@ -3,16 +3,19 @@
     <div class="content-inside-grid">
       <mat-tab-group [selectedIndex]="selectedIndex">
         <mat-tab label="Variables">
-          <app-variables></app-variables>
+          <panel-variables></panel-variables>
         </mat-tab>
         <mat-tab label="Expression">
-          <single-box></single-box>
+          <panel-single-box></panel-single-box>
         </mat-tab>
         <mat-tab label="Results">
-          <app-results></app-results>
+          <panel-results></panel-results>
         </mat-tab>
         <mat-tab label="Functions">
-          <app-functions></app-functions>
+          <panel-functions></panel-functions>
+        </mat-tab>
+        <mat-tab label="Testing">
+          <panel-testing></panel-testing>
         </mat-tab>
       </mat-tab-group>
     </div>

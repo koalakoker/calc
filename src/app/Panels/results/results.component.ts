@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { parse } from '../../Parser/parser';
 
 @Component({
-  selector: 'app-results',
+  selector: 'panel-results',
   templateUrl: './results.component.html',
   styleUrls: ['../panels.component.css']
 })

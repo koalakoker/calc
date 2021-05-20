@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { parse } from '../../Parser/parser';
 @Component({
-  selector: 'app-variables',
+  selector: 'panel-variables',
   templateUrl: './variables.component.html',
   styleUrls: ['../panels.component.css']
 })

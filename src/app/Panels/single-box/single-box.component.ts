@@ -4,11 +4,9 @@ import { LocalStoreService } from '../../Services/local-store.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../State/appState';
 import * as Action from '../../State/state.actions';
-import { Observable } from 'rxjs';
-import * as Selector from '../../State/state.selector';
 import { parse } from '../../Parser/parser';
 @Component({
-  selector: 'single-box',
+  selector: 'panel-single-box',
   templateUrl: './single-box.component.html',
   styleUrls: [
     '../panels.component.css',
