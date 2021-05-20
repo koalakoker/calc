@@ -16,6 +16,9 @@ export function parse(inputList: ReadonlyArray<string>) {
       output += "  ans=" + parsed.vars["ans"].value + "\n\n";
       lastParsed = parsed;
     } catch (error) {
+      console.log("**** Syntax Error parsing ****");
+      console.log(str);
+      console.log("---- Returned value ----");
       console.log(error);
       output += "  " + error.name + "\n\n";
       toBeParsed = removeLastExpression(toBeParsed);

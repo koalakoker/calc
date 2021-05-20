@@ -2128,11 +2128,11 @@ function peg$parse(input, options) {
         return result;
       }
       if (fnName === "hex") {
-      	var value = parseInt(fnArg, 10);
+        var value = new Decimal(fnArg);
       	return "0x" + value.toString(16);;
       }
       if (fnName === "bin") {
-      	var value = parseInt(fnArg, 10);
+        var value = new Decimal(fnArg);
       	return "0b" + value.toString(2);;
       }
       return (result);
@@ -2194,7 +2194,7 @@ var ex_parseHex = function (x) { return new Decimal(x) };
 var ex_parseBin = function (x) { return new Decimal(x) };
 
 var ex_myAdd = function (a, b) { return a.plus(b); }
-var ex_mySub = function (a, b) { return a.minus(b); }
+var ex_mySub = function (a, b) { return new Decimal(a).minus(b); }
 var ex_myMul = function (a, b) { return a.times(b); }
 var ex_myDiv = function (a, b) { return a.dividedBy(b); }
 var ex_myPow = function (a, b) { return a.toPower(b); }
