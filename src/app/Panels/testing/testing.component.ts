@@ -7,9 +7,17 @@ import { parse } from '../../Parser/parser';
 })
 export class TestingComponent {
   output: string = "";
+  input : string ="";
 
   update(inputList: ReadonlyArray<string>) {
-    //this.output = parse(inputList).functions;
-    this.output = "To be defined";
+  }
+
+  onKeyDown(key: KeyboardEvent) {
+    if ((key.code === "Enter") && (key.ctrlKey === true)) {
+      let inputList = this.input.split("\n");
+      console.log(inputList);
+      let parsed = parse(inputList);
+      this.output = parsed.output;
+    }
   }
 }

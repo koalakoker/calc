@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainTabComponent implements OnInit {
 
-  selectedIndex: number = 1;
+  selectedIndex: number = 4//1;
 
   constructor() {
   }
