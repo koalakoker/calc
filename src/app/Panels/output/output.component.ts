@@ -13,14 +13,12 @@ import * as Selector from '../../State/state.selector';
 export class OutputComponent {
   // State observers
   inputList$: Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
-  inputList: ReadonlyArray<string>;
   @Output() updateEvent = new EventEmitter<ReadonlyArray<string>>();
   @Input() output: string = "";
 
   constructor(private store: Store) {
     // Register subscriber
     this.inputList$.subscribe((list: ReadonlyArray<string>) => {
-      this.inputList = list;
       this.updateEvent.emit(list);
     });
   }
