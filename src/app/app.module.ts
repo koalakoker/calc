@@ -12,13 +12,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AppComponent } from './app.component';
-import { FourBoxComponent } from './Panels/four-box/four-box.component';
-import { SingleBoxComponent } from './Panels/single-box/single-box.component';
-import { DebugComponent } from './Panels/debug/debug.component';
 
 import { counterReducer } from './State/state.reducer';
 import { environment } from 'src/environments/environment';
+
 import { MainTabComponent } from './main-tab/main-tab.component';
+import { OutputComponent } from './Panels/output/output.component'
+import { SingleBoxComponent } from './Panels/single-box/single-box.component';
 import { VariablesComponent } from './Panels/variables/variables.component';
 import { FunctionsComponent } from './Panels/functions/functions.component';
 import { ResultsComponent } from './Panels/results/results.component';
@@ -26,13 +26,12 @@ import { ResultsComponent } from './Panels/results/results.component';
 @NgModule({
   declarations: [
     AppComponent,
-    FourBoxComponent,
     SingleBoxComponent,
-    DebugComponent,
     MainTabComponent,
     VariablesComponent,
     FunctionsComponent,
-    ResultsComponent
+    ResultsComponent,
+    OutputComponent
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,5 @@
 <table>
-  <tr>
-    <td align="center">
-      <mat-form-field class="calc-outbox">
-        <textarea #textarea matInput rows="22">{{output}}</textarea>
-      </mat-form-field>
-    </td>
-  </tr>
+  <panel-output [output]="output" (updateEvent)="update($event)"></panel-output>
   <tr>
   <td align="center">
     <mat-form-field class="calc-outbox">

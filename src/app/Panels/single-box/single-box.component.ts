@@ -19,8 +19,6 @@ export class SingleBoxComponent {
   @ViewChild('textarea') textArea: ElementRef;
   input: string = "";
   
-  // State observers
-  inputList$        : Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
 
   output            : string;
   inputListSelected : number = -1;
@@ -36,14 +34,10 @@ export class SingleBoxComponent {
       this.inputBox.nativeElement.focus();
     }, 100);
 
-    // Register subscriber
-    this.inputList$.subscribe((list: ReadonlyArray<string>) => {
-      this.inputList = list;
-      this.update(list);
-    });
   }
 
   update(inputList: ReadonlyArray<string>) {
+    this.inputList = inputList;
     this.output = parse(inputList).output;
     this.updateTextArea();
   }
