@@ -5,6 +5,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../State/appState';
 import * as Action from '../../State/state.actions';
 import { parse } from '../../Parser/parser';
+import { saveAs } from 'file-saver';
+import { OutputComponent } from '../output/output.component';
 @Component({
   selector: 'panel-single-box',
   templateUrl: './single-box.component.html',
@@ -14,10 +16,9 @@ import { parse } from '../../Parser/parser';
   ]})
 export class SingleBoxComponent {
   @ViewChild('inputBox') inputBox: ElementRef;
-  @ViewChild('textarea') textArea: ElementRef;
+  @ViewChild('outputBox') outputBox: OutputComponent;
   input: string = "";
   
-
   output            : string;
   inputListSelected : number = -1;
   inputList         : ReadonlyArray<string>;
@@ -37,15 +38,7 @@ export class SingleBoxComponent {
   update(inputList: ReadonlyArray<string>) {
     this.inputList = inputList;
     this.output = parse(inputList).output;
-    this.updateTextArea();
-  }
-
-  updateTextArea() {
-    if (this.textArea) {
-      setTimeout(() => {
-        this.textArea.nativeElement.scrollTop = this.textArea.nativeElement.scrollHeight;
-      }, 100);
-    }
+    this.outputBox.updateTextArea();
   }
 
   onChange(key) {
@@ -75,6 +68,7 @@ export class SingleBoxComponent {
     this.newInput(this.input);
     this.clearInput();
     this.save();
+    this.outputBox.updateTextArea();
   }
 
   newInput(input: string) {
@@ -129,5 +123,23 @@ export class SingleBoxComponent {
     inputList.forEach( str => {
       this.store.dispatch(Action.addStringToParser({str: str}));
     });
+  }
+
+  saveFile() {
+    const blob = new Blob([this.inputList.join('\n')],{ type: "text/plain;charset=utf-8" });
+    saveAs(blob, "calcHystory.txt");
+  }
+
+  loadFile(files: FileList) {
+    let file = files.item(0);
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      let inputList = evt.target.result.toString().split('\n');
+      inputList.forEach(str => {
+        this.store.dispatch(Action.addStringToParser({ str: str }));
+      });
+      this.save();
+    };
+    reader.readAsText(file);
   }
 }
