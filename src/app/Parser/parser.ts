@@ -4,6 +4,7 @@ export function parse(inputList: ReadonlyArray<string>) {
   let output = "";
   let toBeParsed = "";
   let lastParsed;
+  let lastIsAnError: boolean;
   inputList.forEach(str => {
     output += str + "\n";
     if (toBeParsed !== "") {
@@ -15,6 +16,7 @@ export function parse(inputList: ReadonlyArray<string>) {
       let parsed = parser.parse(toBeParsed);
       output += "  ans=" + parsed.vars["ans"].value + "\n\n";
       lastParsed = parsed;
+      lastIsAnError = false;
     } catch (error) {
       console.log("**** Syntax Error parsing ****");
       console.log(str);
@@ -22,12 +24,15 @@ export function parse(inputList: ReadonlyArray<string>) {
       console.log(error);
       output += "  " + error.name + "\n\n";
       toBeParsed = removeLastExpression(toBeParsed);
+      lastIsAnError = true;
     }
   })
 
-  let vars = "";
-  let functions = "";
-  let results = "";
+  let vars      : string = "";
+  let functions : string = "";
+  let results   : string = "";
+  let lastAns    : string = "";
+  
   if (lastParsed !== undefined) {
     for (const [key] of Object.entries(lastParsed.vars)) {
       vars += key + '=' + lastParsed.vars[key].value + "\n";
@@ -39,14 +44,20 @@ export function parse(inputList: ReadonlyArray<string>) {
     };
     lastParsed.results.forEach((element, index) => {
       results += "[" + index + "]: " + element + "\n";
+      lastAns = element.toString();
     });
   }
+
+  if (lastIsAnError) {
+    lastAns = "NaN";
+  } 
 
   return {
     output: output,
     vars: vars,
     functions: functions,
-    results: results
+    results: results,
+    lastAns: lastAns
   }
 }
 

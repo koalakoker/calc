@@ -7,6 +7,7 @@ import * as Action from '../../State/state.actions';
 import { parse } from '../../Parser/parser';
 import { saveAs } from '../../../../node_modules/file-saver';
 import { OutputComponent } from '../output/output.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'panel-single-box',
   templateUrl: './single-box.component.html',
@@ -24,10 +25,14 @@ export class SingleBoxComponent {
   inputList         : ReadonlyArray<string>;
   toBeParsed        : string;
   state             : AppState;
+
+  evalTimer: NodeJS.Timeout = null;
+  lastInputEvaluated: string = "";
   
   constructor(
     private localStoreService: LocalStoreService,
-    private store: Store) {    
+    private store: Store,
+    private _snackBar: MatSnackBar) {
     setTimeout(() => {
       this.load();
       this.inputBox.nativeElement.focus();
@@ -39,6 +44,26 @@ export class SingleBoxComponent {
     this.inputList = inputList;
     this.output = parse(inputList).output;
     this.outputBox.updateTextArea();
+  }
+
+  updateEvalPreview() {
+    if (this.input === this.lastInputEvaluated) {
+      return;
+    }
+    if (this.input === "") {
+      this._snackBar.dismiss();
+      return;
+    }
+    let inputList: Array<string> = [];
+    this.inputList.forEach(str => {
+      inputList.push(str);
+    });
+    inputList.push(this.input);
+    let lastAns: string = parse(inputList).lastAns;
+    if (!(lastAns === "NaN")) {
+      this._snackBar.open("ans = " + lastAns, "hide");
+    }
+    this.lastInputEvaluated = this.input;
   }
 
   onChange(key) {
@@ -62,6 +87,17 @@ export class SingleBoxComponent {
           this.input = "ans" + char;
       }
     }
+
+    if (!(this.input === this.lastInputEvaluated)) {
+      this._snackBar.dismiss();
+    }
+    if (this.evalTimer !== null) {
+      clearTimeout(this.evalTimer);
+    }
+    this.evalTimer = setTimeout(() => {
+      this.updateEvalPreview();
+      this.evalTimer = null;
+    }, 750);
   }
 
   enter() {
