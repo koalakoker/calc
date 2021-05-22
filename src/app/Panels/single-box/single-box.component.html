@@ -4,7 +4,13 @@
   <td align="center">
     <mat-form-field class="calc-outbox">
       <input #inputBox matInput placeholder="input expression" 
-      [(ngModel)]="input" (keyup)="onChange($event)" size="25">
+      [(ngModel)]="input" (keyup)="onChange($event)" size="25"
+      [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
   </td>
 </tr>

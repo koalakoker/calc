@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { ElementRef, ViewChild } from '@angular/core';
 import { LocalStoreService } from '../../Services/local-store.service';
 import { Store } from '@ngrx/store';
@@ -8,6 +8,9 @@ import { parse } from '../../Parser/parser';
 import { saveAs } from '../../../../node_modules/file-saver';
 import { OutputComponent } from '../output/output.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, fromEvent } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { map, startWith, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
   selector: 'panel-single-box',
   templateUrl: './single-box.component.html',
@@ -15,10 +18,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     '../panels.component.css',
     './single-box.component.css'
   ]})
-export class SingleBoxComponent {
+export class SingleBoxComponent implements AfterViewInit {
   @ViewChild('inputBox') inputBox: ElementRef;
   @ViewChild('outputBox') outputBox: OutputComponent;
   input: string = "";
+
+  autoCompleteOptions: string[] = [];
+  filteredOptions: Observable<string[]>;
   
   output            : string;
   inputListSelected : number = -1;
@@ -40,10 +46,29 @@ export class SingleBoxComponent {
 
   }
 
+  ngAfterViewInit(): void {
+    const terms$ = fromEvent<any>(this.inputBox.nativeElement, 'keyup')
+      .pipe(
+        map(event => this._filter(event.target.value)),
+        startWith(['']),
+        debounceTime(400),
+        distinctUntilChanged()
+      );
+    this.filteredOptions = terms$;
+  }
+
+  private _filter(value): string[] {
+    const filterValue = value.toLowerCase();
+    return this.autoCompleteOptions.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  }
+
   update(inputList: ReadonlyArray<string>) {
     this.inputList = inputList;
-    this.output = parse(inputList).output;
+    let parsed = parse(inputList);
+    this.output = parsed.output;
     this.outputBox.updateTextArea();
+    
+    this.autoCompleteOptions = parsed.functions.split('\n').concat(parsed.vars.split("\n"));
   }
 
   updateEvalPreview() {
@@ -71,10 +96,10 @@ export class SingleBoxComponent {
       this.enter();
     }
     if (key.code === "ArrowUp") {
-      this.up();
+      //this.up();
     }
     if (key.code === "ArrowDown") {
-      this.down();
+      //this.down();
     }
     if (key.code === "Escape") {
       this.clearInput();
