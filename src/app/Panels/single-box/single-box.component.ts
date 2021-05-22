@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../State/appState';
 import * as Action from '../../State/state.actions';
 import { parse } from '../../Parser/parser';
-import { saveAs } from 'file-saver';
+import { saveAs } from '../../../../node_modules/file-saver';
 import { OutputComponent } from '../output/output.component';
 @Component({
   selector: 'panel-single-box',
@@ -130,7 +130,8 @@ export class SingleBoxComponent {
     saveAs(blob, "calcHystory.txt");
   }
 
-  loadFile(files: FileList) {
+  loadFile(e) {
+    let files: FileList = e.target.files;
     let file = files.item(0);
     const reader = new FileReader();
     reader.onload = (evt) => {

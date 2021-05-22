@@ -18,7 +18,7 @@
       <button mat-mini-fab color="primary" (click)="clearInput()"><mat-icon>clear</mat-icon></button>
       <button mat-mini-fab color="primary" (click)="saveFile()"><mat-icon>save</mat-icon></button>
       <button mat-mini-fab color="primary" (click)="fileInput.click()"><mat-icon>add_circle</mat-icon>
-        <input #fileInput type="file" (change)="loadFile($event.target.files)" style="display:none;" />
+        <input #fileInput type="file" (change)="loadFile($event)" style="display:none;" />
       </button>
     </div>
   </td>
