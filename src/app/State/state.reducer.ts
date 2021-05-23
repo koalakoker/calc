@@ -40,6 +40,14 @@ const _counterReducer = createReducer(
     historyAddState(newState);
     return newState;
   }),
+  on(Action.addListToParser, (state: AppState, { list }) => {
+    let newState: AppState = _.cloneDeep(state);
+    list.forEach( str => {
+      newState.inputList.push(str);
+    })
+    historyAddState(newState);
+    return newState;
+  }),
   on(Action.historyUndo, (state: AppState) => {
     if (history.past.length > 0) {
     // use first past state as next present ...
