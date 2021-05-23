@@ -1,11 +1,11 @@
 <mat-grid-list cols="1" rowHeight="1:2">
   <mat-grid-tile>
     <div class="content-inside-grid">
-      <mat-tab-group [selectedIndex]="selectedIndex">
+      <mat-tab-group [selectedIndex]="selectedIndex" (selectedIndexChange)="onChangeTab($event)">
         <mat-tab label="Variables">
           <panel-variables></panel-variables>
         </mat-tab>
-        <mat-tab label="Expression">
+        <mat-tab #tabExpression label="Expression">
           <panel-single-box></panel-single-box>
         </mat-tab>
         <mat-tab label="Results">

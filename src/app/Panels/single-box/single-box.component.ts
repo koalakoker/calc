@@ -37,7 +37,10 @@ export class SingleBoxComponent {
       this.load();
       this.inputBox.nativeElement.focus();
     }, 100);
+  }
 
+  scrollDownOutput() {
+    this.outputBox.updateTextArea();
   }
 
   update(inputList: ReadonlyArray<string>) {
