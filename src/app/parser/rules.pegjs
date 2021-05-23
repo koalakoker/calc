@@ -58,10 +58,11 @@
   
   var ex_fnAssign = function(fnName, fnArg, fnExpr) {
   	var retVal = NaN;
-    if ((typeof Math        [fnName] === 'undefined') && 
-        (typeof ex_functions[fnName] === 'undefined')) {
+    if (typeof Math        [fnName] === 'undefined') {
       ex_functions[fnName] = {};
+      fnExpr = fnExpr.replace(/\s+/g,'');
       ex_functions[fnName].expr = fnExpr;
+      fnArg = fnArg.replace(/\s+/g,'');
       ex_functions[fnName].arg  = fnArg;
       retVal = 0;
     }
@@ -203,7 +204,7 @@ VarAssign "var assignment" =
  }
  
 VarList "Variable list" = 
-  _ Name _ ("," _ Name)* {
+  Name  (_ "," _ Name)* {
  return text();
  }
  
@@ -221,6 +222,6 @@ FnExpr "Function expression" =
   [^\n\r]+ {return text();}
  
 FnAssign "function assignment" = 
-  _ fnName:Name _ [(] _ fnArg: VarList _ [)][=] fnExpr:FnExpr {
+  _ fnName:Name _ [(] _ fnArg: VarList _ [)] _ [=] fnExpr:FnExpr {
   return ex_fnAssign(fnName, fnArg, fnExpr);
 }
