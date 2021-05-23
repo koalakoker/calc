@@ -28,15 +28,25 @@ export class SingleBoxComponent {
 
   evalTimer: NodeJS.Timeout = null;
   lastInputEvaluated: string = "";
+
+  reader: FileReader = new FileReader();
+  @ViewChild('fileInput') fileInput: ElementRef;
   
   constructor(
     private localStoreService: LocalStoreService,
     private store: Store,
     private _snackBar: MatSnackBar) {
-    setTimeout(() => {
+    
+      setTimeout(() => {
       this.load();
       this.inputBox.nativeElement.focus();
     }, 100);
+    
+    this.reader.onload = (evt) => {
+      let inputList = evt.target.result.toString().split('\n');
+      this.store.dispatch(Action.addListToParser({ list: inputList }));
+      this.save();
+    };
   }
 
   scrollDownOutput() {
@@ -172,14 +182,7 @@ export class SingleBoxComponent {
   loadFile(e) {
     let files: FileList = e.target.files;
     let file = files.item(0);
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      let inputList = evt.target.result.toString().split('\n');
-      inputList.forEach(str => {
-        this.store.dispatch(Action.addStringToParser({ str: str }));
-      });
-      this.save();
-    };
-    reader.readAsText(file);
+    this.reader.readAsText(file);
+    this.fileInput.nativeElement.value = '';
   }
 }
