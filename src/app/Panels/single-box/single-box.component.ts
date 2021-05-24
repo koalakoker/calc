@@ -4,7 +4,7 @@ import { LocalStoreService } from '../../Services/local-store.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../State/appState';
 import * as Action from '../../State/state.actions';
-import { parse } from '../../Parser/parser';
+import { ParserService } from '../../Parser/parser.service';
 import { saveAs } from '../../../../node_modules/file-saver';
 import { OutputComponent } from '../output/output.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -35,12 +35,18 @@ export class SingleBoxComponent {
   constructor(
     private localStoreService: LocalStoreService,
     private store: Store,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar,
+    private parser: ParserService) {
     
       setTimeout(() => {
       this.load();
       this.inputBox.nativeElement.focus();
     }, 100);
+
+    // Subscibe to ParserService
+    parser.subscribe( (list) => {
+      this.update(list);  
+    });
     
     this.reader.onload = (evt) => {
       let inputList = evt.target.result.toString().split('\n');
@@ -55,7 +61,7 @@ export class SingleBoxComponent {
 
   update(inputList: ReadonlyArray<string>) {
     this.inputList = inputList;
-    this.output = parse(inputList).output;
+    this.output = this.parser.output;
     this.outputBox.updateTextArea();
   }
 
@@ -72,7 +78,7 @@ export class SingleBoxComponent {
       inputList.push(str);
     });
     inputList.push(this.input);
-    let lastAns: string = parse(inputList).lastAns;
+    let lastAns: string = this.parser.lastAns;
     if (!(lastAns === "NaN")) {
       this._snackBar.open("ans = " + lastAns, "hide");
     }
@@ -169,9 +175,7 @@ export class SingleBoxComponent {
 
   load() {
     let inputList = this.localStoreService.getKey("inputList").split(';');
-    inputList.forEach( str => {
-      this.store.dispatch(Action.addStringToParser({str: str}));
-    });
+    this.store.dispatch(Action.addListToParser({list: inputList}));
   }
 
   saveFile() {

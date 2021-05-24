@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { parse } from '../../Parser/parser';
+import { ParserService } from '../../Parser/parser.service';
 @Component({
   selector: 'panel-functions',
   templateUrl: './functions.component.html',
@@ -8,7 +8,14 @@ import { parse } from '../../Parser/parser';
 export class FunctionsComponent {
   output: string = "";
 
+  constructor(private parser: ParserService) {
+    // Subscibe to ParserService
+    parser.subscribe((list) => {
+      this.update(list);
+    });
+  }
+
   update(inputList: ReadonlyArray<string>) {
-    this.output = parse(inputList).functions;
+    this.output = this.parser.functions;
   }
 }

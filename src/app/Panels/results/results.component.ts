@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { parse } from '../../Parser/parser';
+import { ParserService } from '../../Parser/parser.service';
 
 @Component({
   selector: 'panel-results',
@@ -10,8 +10,15 @@ export class ResultsComponent {
 
   output: string = "";
 
+  constructor(private parser: ParserService) {
+    // Subscibe to ParserService
+    parser.subscribe((list) => {
+      this.update(list);
+    });
+  }
+
   update(inputList: ReadonlyArray<string>) {
-    this.output = parse(inputList).results;
+    this.output = this.parser.results;
   }
 
 }
