@@ -16,3 +16,10 @@
   text-align: right;
   margin-right: 10px;
 }
+
+.progressBar {
+  position: fixed;
+  bottom: 0px;
+  width: 90%;
+  transform: translate(5%, 0%); /* (100%-90%)/2 */
+}
