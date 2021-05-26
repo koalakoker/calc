@@ -50,7 +50,10 @@ export class SingleBoxComponent {
     
     this.reader.onload = (evt) => {
       let inputList = evt.target.result.toString().split('\n');
-      this.store.dispatch(Action.addListToParser({ list: inputList }));
+      //this.store.dispatch(Action.addListToParser({ list: inputList }));
+      inputList.forEach(str => {
+        this.store.dispatch(Action.addStringToParser({ str: str }));
+      });
       this.save();
     };
   }

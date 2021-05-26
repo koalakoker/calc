@@ -48,7 +48,9 @@ export class ParserService extends Observable<ReadonlyArray<string>> {
       toBeParsed += str;
 
       try {
+        //console.log(toBeParsed);
         let parsed = parser.parse(toBeParsed);
+        //console.log(parsed);
         output += "  ans=" + parsed.vars["ans"].value + "\n\n";
         lastParsed = parsed;
         lastIsAnError = false;
