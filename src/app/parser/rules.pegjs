@@ -18,14 +18,6 @@
   var ex_myPI  = function(){return Math.acos(-1);}
   var ex_myE   = function(){return Math.exp(1); }
   
-  var evaluate = function(head, tail) {
-  	ans = head;
-  	tail.reduce(function(result, element) {
-    	ans = element[2];	
-    	return ans;
-    }, head);
-  }
-  
   var ex_fn = function (fnName, fnArg) {
   	var result = NaN;
     if (typeof Math[fnName] !== 'undefined') {
@@ -88,20 +80,10 @@
 
 }
 
-Program = 
-  _ head:Input _ tail:(Cr _ Input _)* {
-    evaluate(head, tail);
-    return {
-    	results: ex_results,
-        vars: ex_variables,
-        functions: ex_functions
-    };
-  }
-
 Input = ans:( FnAssign / VarAssign / 
         Expression / Command / FnValue / AnsValue / VarValue) {
         setVar("ans", ans);
-    	ex_results.push(ans);
+    	return ans;
 	}
 
 Expression = 
