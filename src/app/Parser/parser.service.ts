@@ -27,65 +27,67 @@ export class ParserService extends Observable<ReadonlyArray<string>> {
     
     // Subscribe to store
     this.inputList$.subscribe((list: ReadonlyArray<string>) => {
-      this.parse(list);
+      if (list.length > 0) {
+        this.parse(list[list.length - 1]);
+      } else {
+        this.output = '';
+      }
       this.subscrivers.forEach(sub => {
         sub.next(list);
       });
     });
   }
 
-  private parse(inputList: ReadonlyArray<string>): void {
+  private parse(str: string): void {
     let output = "";
     let toBeParsed = "";
     let lastParsed;
     let lastIsAnError: boolean;
+    
     console.log("Running parser");
-    inputList.forEach(str => {
-      output += str + "\n";
-      if (toBeParsed !== "") {
-        toBeParsed += "\n";
-      }
-      toBeParsed += str;
+    
+    output = str + "\n";
+    toBeParsed = str;
 
-      try {
-        let parsed = parser.parse(toBeParsed);
-        output += "  ans=" + parsed.vars["ans"].value + "\n\n";
-        lastParsed = parsed;
-        lastIsAnError = false;
-      } catch (error) {
-        // console.log("**** Syntax Error parsing ****");
-        // console.log(str);
-        // console.log("---- Returned value ----");
-        // console.log(error);
-        output += "  " + error.name + "\n\n";
-        toBeParsed = this.removeLastExpression(toBeParsed);
-        lastIsAnError = true;
-      }
-    })
+    try {
+      let parsed = parser.parse(toBeParsed);
+      output += "  ans=" + parsed + "\n\n";
+      lastParsed = parsed;
+      lastIsAnError = false;
+    } catch (error) {
+      console.log("**** Syntax Error parsing ****");
+      console.log(str);
+      console.log("---- Returned value ----");
+      console.log(error);
+      output += "  " + error.name + "\n\n";
+      toBeParsed = this.removeLastExpression(toBeParsed);
+      lastIsAnError = true;
+    }
+    
 
     let vars: string = "";
     let functions: string = "";
     let results: string = "";
     let lastAns: string = "";
 
-    if (lastParsed !== undefined) {
-      for (const [key] of Object.entries(lastParsed.vars)) {
-        vars += key + '=' + lastParsed.vars[key].value + "\n";
-      };
+    // if (lastParsed !== undefined) {
+    //   for (const [key] of Object.entries(lastParsed.vars)) {
+    //     vars += key + '=' + lastParsed.vars[key].value + "\n";
+    //   };
 
-      for (const [key] of Object.entries(lastParsed.functions)) {
-        let value = lastParsed.functions[key];
-        functions += key + "(" + value.arg + ')=' + value.expr + "\n";
-      };
-      lastParsed.results.forEach((element, index) => {
-        results += "[" + index + "]: " + element + "\n";
-        lastAns = element.toString();
-      });
-    }
+    //   for (const [key] of Object.entries(lastParsed.functions)) {
+    //     let value = lastParsed.functions[key];
+    //     functions += key + "(" + value.arg + ')=' + value.expr + "\n";
+    //   };
+    //   lastParsed.results.forEach((element, index) => {
+    //     results += "[" + index + "]: " + element + "\n";
+    //     lastAns = element.toString();
+    //   });
+    // }
 
-    if (lastIsAnError) {
-      lastAns = "NaN";
-    }
+    // if (lastIsAnError) {
+    //   lastAns = "NaN";
+    // }
 
     this.output   = output;
     this.vars     = vars;

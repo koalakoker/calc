@@ -2002,9 +2002,6 @@ function peg$parse(input, options) {
 
 
     var ans;
-    var ex_results = [];
-    var ex_variables = {};
-    var ex_functions = {};
     var ex_fn = function (fnName, fnArg) {
     	var result = NaN;
       if (typeof Decimal[fnName] !== 'undefined') {
@@ -2085,7 +2082,9 @@ function peg$parse(input, options) {
     );
   }
 }
-
+var ex_results = [];
+var ex_variables = {};
+var ex_functions = {};
 var ex_parseInt = function (x) { return new Decimal(x) };
 var ex_parseFloat = function (x) { return new Decimal(x) };
 var ex_parseHex = function (x) { return new Decimal(x) };

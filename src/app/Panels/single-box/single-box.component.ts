@@ -20,7 +20,7 @@ export class SingleBoxComponent {
   @ViewChild('outputBox') outputBox: OutputComponent;
   input: string = "";
   
-  output            : string;
+  output            : string = '';
   inputListSelected : number = -1;
   inputList         : ReadonlyArray<string>;
   toBeParsed        : string;
@@ -61,7 +61,7 @@ export class SingleBoxComponent {
 
   update(inputList: ReadonlyArray<string>) {
     this.inputList = inputList;
-    this.output = this.parser.output;
+    this.output += this.parser.output;
     this.outputBox.updateTextArea();
   }
 
