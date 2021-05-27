@@ -50,7 +50,9 @@ export class SingleBoxComponent {
     
     this.reader.onload = (evt) => {
       let inputList = evt.target.result.toString().split('\n');
-      this.store.dispatch(Action.addListToParser({ list: inputList }));
+      inputList.forEach( str => {
+        this.store.dispatch(Action.addStringToParser({str: str}));
+      })
       this.save();
     };
   }
@@ -175,7 +177,9 @@ export class SingleBoxComponent {
 
   load() {
     let inputList = this.localStoreService.getKey("inputList").split(';');
-    this.store.dispatch(Action.addListToParser({list: inputList}));
+    inputList.forEach(str => {
+      this.store.dispatch(Action.addStringToParser({str: str}));
+    });
   }
 
   saveFile() {
