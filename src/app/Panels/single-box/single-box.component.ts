@@ -133,6 +133,7 @@ export class SingleBoxComponent {
   newInput(input: string) {
     if (input === "clear") {
       this.store.dispatch(Action.resetState());
+      this.output = "";
     } else {
       this.store.dispatch(Action.addStringToParser({ str: input }));
     }
