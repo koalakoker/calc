@@ -122,10 +122,12 @@ export class SingleBoxComponent {
   }
 
   enter() {
-    this.newInput(this.input);
-    this.clearInput();
-    this.save();
-    this.outputBox.updateTextArea();
+    if (this.input !== "") {
+      this.newInput(this.input);
+      this.clearInput();
+      this.save();
+      this.outputBox.updateTextArea();
+    }
   }
 
   newInput(input: string) {
