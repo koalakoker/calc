@@ -51,7 +51,12 @@ export class SingleBoxComponent {
     this.reader.onload = (evt) => {
       let inputList = evt.target.result.toString().split('\n');
       inputList.forEach( str => {
-        this.store.dispatch(Action.addStringToParser({str: str}));
+        this.store.dispatch(Action.addStringToParser({
+          newInput: str,
+          variables: this.parser.vars,
+          functions: this.parser.functions,
+          results: this.parser.results
+        }));
       })
       this.save();
     };
@@ -135,7 +140,12 @@ export class SingleBoxComponent {
       this.store.dispatch(Action.resetState());
       this.output = "";
     } else {
-      this.store.dispatch(Action.addStringToParser({ str: input }));
+      this.store.dispatch(Action.addStringToParser({
+        newInput:  input,
+        variables: this.parser.vars,
+        functions: this.parser.functions,
+        results:   this.parser.results
+       }));
     }
   }
 
@@ -181,7 +191,12 @@ export class SingleBoxComponent {
   load() {
     let inputList = this.localStoreService.getKey("inputList").split(';');
     inputList.forEach(str => {
-      this.store.dispatch(Action.addStringToParser({str: str}));
+      this.store.dispatch(Action.addStringToParser({
+        newInput: str,
+        variables: this.parser.vars,
+        functions: this.parser.functions,
+        results: this.parser.results
+      }));
     });
   }
 

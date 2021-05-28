@@ -78,7 +78,6 @@ export class ParserService extends Observable<ReadonlyArray<string>> {
       functions += key + "(" + value.arg + ')=' + value.expr + "\n";
     };
     
-    console.log(parser.results);
     parser.results.forEach((element, index) => {
       results += "[" + index + "]: " + element + "\n";
       lastAns = element.toString();

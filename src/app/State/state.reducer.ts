@@ -4,7 +4,10 @@ import { AppState } from './appState';
 import * as _ from '../../../node_modules/lodash';
 
 export const initialState: AppState = {
-  inputList: []
+  inputList: [],
+  variables: {},
+  functions: {},
+  results: []
 };
 
 export interface History {
@@ -34,9 +37,19 @@ const _counterReducer = createReducer(
     historyAddState(initialState);
     return initialState
   }),
-  on(Action.addStringToParser, (state: AppState, { str }) => {
+  on(Action.addStringToParser, (state: AppState, {
+    newInput,
+    variables,
+    functions,
+    results
+   }) => {
+     
     let newState: AppState = _.cloneDeep(state);
-    newState.inputList.push(str);
+    newState.inputList.push(newInput);
+    newState.variables = _.cloneDeep(variables);
+    newState.functions = _.cloneDeep(functions);
+    newState.results   = _.cloneDeep(results);
+
     historyAddState(newState);
     return newState;
   }),
