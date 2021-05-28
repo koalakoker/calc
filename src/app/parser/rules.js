@@ -2101,3 +2101,6 @@ var ex_myE = function () { return new Decimal(1).exp(); }
 
 export var SyntaxError = peg$SyntaxError;
 export var parse = peg$parse;
+export var vars = ex_variables;
+export var functions = ex_functions;
+export var results = ex_results;
