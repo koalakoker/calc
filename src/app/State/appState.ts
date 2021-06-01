@@ -3,4 +3,6 @@ export interface AppState {
   variables: any;
   functions: any;
   results: Array<any>;
+  output: string;
+  preview: string;
 }

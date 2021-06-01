@@ -2,12 +2,15 @@ import { createReducer, on } from '@ngrx/store';
 import * as Action from './state.actions';
 import { AppState } from './appState';
 import * as _ from '../../../node_modules/lodash';
+import * as parser from '../Parser/rules';
 
 export const initialState: AppState = {
   inputList: [],
   variables: {},
   functions: {},
-  results: []
+  results: [],
+  output: "",
+  preview: undefined
 };
 
 export interface History {
@@ -23,6 +26,7 @@ let history: History = {
 };
 
 function historyAddState(newState: AppState) {
+  newState.preview = undefined;
   history = {
     // push previous present into past for undo
     past: [history.present, ...history.past],
@@ -31,26 +35,48 @@ function historyAddState(newState: AppState) {
   }
 }
 
+function parsing(newState, newInput) {
+  // Restore the parser state from store
+  parser.setVars(newState.variables);
+  parser.setFunctions(newState.functions);
+  parser.setResults(newState.results);
+
+  let output;
+
+  try {
+    output = parse(newInput);
+  } catch (error) {
+    console.log("**** Syntax Error parsing ****");
+    console.log(newInput);
+    console.log("---- Returned value ----");
+    console.log(error);
+    output += "  " + error.name + "\n\n";
+  }
+
+  return output;
+}
+
 const _counterReducer = createReducer(
   initialState,
   on(Action.resetState, (state) => {
     historyAddState(initialState);
     return initialState
   }),
-  on(Action.addStringToParser, (state: AppState, {
-    newInput,
-    variables,
-    functions,
-    results
-   }) => {
-     
+  on(Action.addString, (state: AppState, { newInput }) => {
     let newState: AppState = _.cloneDeep(state);
     newState.inputList.push(newInput);
-    newState.variables = _.cloneDeep(variables);
-    newState.functions = _.cloneDeep(functions);
-    newState.results   = _.cloneDeep(results);
-
+    let result = parsing(newState, newInput);
+    newState.results   = parser.results();
+    newState.variables = parser.vars();
+    newState.functions = parser.functions();
+    newState.output    += result;
     historyAddState(newState);
+    return newState;
+  }),
+  on(Action.preview, (state: AppState, { newInput }) => {
+    let newState: AppState = _.cloneDeep(state);
+    let result = parsing(newState, newInput);
+    newState.preview = result;
     return newState;
   }),
   on(Action.historyUndo, (state: AppState) => {
@@ -91,4 +117,30 @@ const _counterReducer = createReducer(
 
 export function counterReducer(state:  AppState, action) {
   return _counterReducer(state, action);
+}
+
+function parse(str: string): string {
+  let toBeParsed = "";
+  let parsed;
+  let output: string = "";
+
+  console.log("Running parser");
+
+  output = str + "\n";
+  toBeParsed = str;
+
+  try {
+    if(toBeParsed != "") {
+      parsed = parser.parse(toBeParsed);
+      parser.appendResults(parsed);
+      output += "  ans=" + parsed + "\n\n";
+    }
+  } catch (error) {
+    console.log("**** Syntax Error parsing ****");
+    console.log(str);
+    console.log("---- Returned value ----");
+    console.log(error);
+    output += "  " + error.name + "\n\n";
+  }
+  return output;
 }

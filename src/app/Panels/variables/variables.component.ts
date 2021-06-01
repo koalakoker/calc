@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { ParserService } from '../../Parser/parser.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import * as Selector from '../../State/state.selector';
 @Component({
   selector: 'panel-variables',
   templateUrl: './variables.component.html',
@@ -7,17 +9,23 @@ import { ParserService } from '../../Parser/parser.service';
 })
 export class VariablesComponent {
 
+  vars$: Observable<any> = this.store.select(Selector.selectVariables);
   output: string = "";
 
-  constructor(private parser: ParserService) {
-    // Subscibe to ParserService
-    parser.subscribe((list) => {
-      this.update(list);
+  constructor(private store: Store) {
+    // Subscibe to store
+    this.vars$.subscribe((updatedVars: any) => {
+      this.update(updatedVars);
     });
   }
   
-  update(inputList: ReadonlyArray<string>) {
-    this.output = this.parser.vars;
+  update(updatedVars: any) {
+    let vars: string = "";
+    
+    for (const [key] of Object.entries(updatedVars)) {
+      vars += key + '=' + updatedVars[key].value + "\n";
+    };
+    this.output = vars;
   }
 
 }

@@ -4,6 +4,7 @@
  * http://pegjs.org/
  */
 import { Decimal } from '../../assets/decimal.js/decimal'
+import * as _ from '../../../node_modules/lodash';
 
 "use strict";
 
@@ -2101,6 +2102,32 @@ var ex_myE = function () { return new Decimal(1).exp(); }
 
 export var SyntaxError = peg$SyntaxError;
 export var parse = peg$parse;
-export var vars = ex_variables;
-export var functions = ex_functions;
-export var results = ex_results;
+
+export function vars() {
+  return ex_variables;
+}
+
+export function setVars(newVars) {
+  ex_variables = _.cloneDeep(newVars);
+}
+
+export function functions() {
+  return ex_functions;
+}
+
+export function setFunctions(newFunctions) {
+  ex_functions = _.cloneDeep(newFunctions);
+}
+
+export function results() {
+  return ex_results;
+} 
+
+export function setResults(newResults) {
+  ex_results = _.cloneDeep(newResults);
+}
+
+export function appendResults(newResults) {
+  ex_results.push(newResults);
+}
+

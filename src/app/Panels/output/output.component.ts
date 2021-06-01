@@ -9,7 +9,7 @@ import { ElementRef, ViewChild } from '@angular/core';
   ]
 })
 export class OutputComponent {
-  @Output() updateEvent = new EventEmitter<ReadonlyArray<string>>();
+  
   @Input() output: string = "";
   @ViewChild('textarea') textArea: ElementRef;
 

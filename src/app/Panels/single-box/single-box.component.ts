@@ -4,6 +4,8 @@ import { LocalStoreService } from '../../Services/local-store.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../State/appState';
 import * as Action from '../../State/state.actions';
+import { Observable } from 'rxjs';
+import * as Selector from '../../State/state.selector';
 import { ParserService } from '../../Parser/parser.service';
 import { saveAs } from '../../../../node_modules/file-saver';
 import { OutputComponent } from '../output/output.component';
@@ -20,7 +22,10 @@ export class SingleBoxComponent {
   @ViewChild('outputBox') outputBox: OutputComponent;
   input: string = "";
   
+  output$: Observable<string> = this.store.select(Selector.selectOutput);
   output            : string = '';
+  
+  inputList$: Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
   inputListSelected : number = -1;
   inputList         : ReadonlyArray<string>;
   toBeParsed        : string;
@@ -43,19 +48,22 @@ export class SingleBoxComponent {
       this.inputBox.nativeElement.focus();
     }, 100);
 
-    // Subscibe to ParserService
-    parser.subscribe( (list) => {
-      this.update(list);  
+    // Subscibe to store
+    this.inputList$.subscribe((list: ReadonlyArray<string>) => {
+      this.inputList = list;
+    });
+    this.output$.subscribe((output: any) => {
+      this.output = output;
+      if (this.outputBox !== undefined) { 
+        this.outputBox.updateTextArea();
+      }
     });
     
     this.reader.onload = (evt) => {
       let inputList = evt.target.result.toString().split('\n');
       inputList.forEach( str => {
-        this.store.dispatch(Action.addStringToParser({
-          newInput: str,
-          variables: this.parser.vars,
-          functions: this.parser.functions,
-          results: this.parser.results
+        this.store.dispatch(Action.addString({
+          newInput: str
         }));
       })
       this.save();
@@ -63,12 +71,6 @@ export class SingleBoxComponent {
   }
 
   scrollDownOutput() {
-    this.outputBox.updateTextArea();
-  }
-
-  update(inputList: ReadonlyArray<string>) {
-    this.inputList = inputList;
-    this.output += this.parser.output;
     this.outputBox.updateTextArea();
   }
 
@@ -140,11 +142,8 @@ export class SingleBoxComponent {
       this.store.dispatch(Action.resetState());
       this.output = "";
     } else {
-      this.store.dispatch(Action.addStringToParser({
-        newInput:  input,
-        variables: this.parser.vars,
-        functions: this.parser.functions,
-        results:   this.parser.results
+      this.store.dispatch(Action.addString({
+        newInput: input
        }));
     }
   }
@@ -185,19 +184,16 @@ export class SingleBoxComponent {
   }
 
   save() {
-    this.localStoreService.setKey("inputList", this.inputList.join(';'));
+    // this.localStoreService.setKey("inputList", this.inputList.join(';'));
   }
 
   load() {
-    let inputList = this.localStoreService.getKey("inputList").split(';');
-    inputList.forEach(str => {
-      this.store.dispatch(Action.addStringToParser({
-        newInput: str,
-        variables: this.parser.vars,
-        functions: this.parser.functions,
-        results: this.parser.results
-      }));
-    });
+    // let inputList = this.localStoreService.getKey("inputList").split(';');
+    // inputList.forEach(str => {
+    //   this.store.dispatch(Action.addString({
+    //     newInput: str
+    //   }));
+    // });
   }
 
   saveFile() {

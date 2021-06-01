@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { ParserService } from '../../Parser/parser.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import * as Selector from '../../State/state.selector';
 
 @Component({
   selector: 'panel-results',
@@ -7,18 +9,25 @@ import { ParserService } from '../../Parser/parser.service';
   styleUrls: ['../panels.component.css']
 })
 export class ResultsComponent {
-
+  results$: Observable<any> = this.store.select(Selector.selectResults);
   output: string = "";
 
-  constructor(private parser: ParserService) {
-    // Subscibe to ParserService
-    parser.subscribe((list) => {
-      this.update(list);
+  constructor(private store: Store) {
+    // Subscibe to store
+    this.results$.subscribe((updatedResults: ReadonlyArray<string>) => {
+      this.update(updatedResults);
     });
   }
 
-  update(inputList: ReadonlyArray<string>) {
-    this.output = this.parser.results;
+  update(updatedResults: ReadonlyArray<string>) {
+   
+    let results: string = "";
+    
+    updatedResults.forEach((element, index) => {
+      results += "[" + index + "]: " + element + "\n";
+    });
+
+    this.output = results;
   }
 
 }
