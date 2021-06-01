@@ -22,7 +22,10 @@ export class SingleBoxComponent {
   input: string = "";
   
   output$: Observable<string> = this.store.select(Selector.selectOutput);
-  output            : string = '';
+  output : string = '';
+
+  preview$: Observable<string> = this.store.select(Selector.selectPreview);
+  preview : string = '';
   
   inputList$: Observable<ReadonlyArray<string>> = this.store.select(Selector.selectInputList);
   inputListSelected : number = -1;
@@ -50,11 +53,17 @@ export class SingleBoxComponent {
     this.inputList$.subscribe((list: ReadonlyArray<string>) => {
       this.inputList = list;
     });
-    this.output$.subscribe((output: any) => {
+    this.output$.subscribe((output: string) => {
       this.output = output;
       if (this.outputBox !== undefined) { 
         this.outputBox.updateTextArea();
       }
+    });
+    this.preview$.subscribe((preview: string) => {
+      if (!(preview === "NaN") && !(preview === undefined)) {
+        this._snackBar.open(preview, "hide");
+      }
+      this.lastInputEvaluated = this.input;
     });
     
     this.reader.onload = (evt) => {
@@ -72,7 +81,7 @@ export class SingleBoxComponent {
     this.outputBox.updateTextArea();
   }
 
-  updateEvalPreview() {
+  previewTimeout() {
     if (this.input === this.lastInputEvaluated) {
       return;
     }
@@ -81,14 +90,7 @@ export class SingleBoxComponent {
       return;
     }
     
-    // Dispatch acton preview
-    
-    let lastAns: string = "to be completed";
-    
-    if (!(lastAns === "NaN")) {
-      this._snackBar.open("ans = " + lastAns, "hide");
-    }
-    this.lastInputEvaluated = this.input;
+    this.store.dispatch(Action.previewUpdate({ newInput: this.input }));
   }
 
   onChange(key) {
@@ -120,7 +122,7 @@ export class SingleBoxComponent {
       clearTimeout(this.evalTimer);
     }
     this.evalTimer = setTimeout(() => {
-      this.updateEvalPreview();
+      this.previewTimeout();
       this.evalTimer = null;
     }, 750);
   }

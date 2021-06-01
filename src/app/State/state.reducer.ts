@@ -35,27 +35,6 @@ function historyAddState(newState: AppState) {
   }
 }
 
-function parsing(newState, newInput) {
-  // Restore the parser state from store
-  parser.setVars(newState.variables);
-  parser.setFunctions(newState.functions);
-  parser.setResults(newState.results);
-
-  let output;
-
-  try {
-    output = parse(newInput);
-  } catch (error) {
-    console.log("**** Syntax Error parsing ****");
-    console.log(newInput);
-    console.log("---- Returned value ----");
-    console.log(error);
-    output += "  " + error.name + "\n\n";
-  }
-
-  return output;
-}
-
 const _counterReducer = createReducer(
   initialState,
   on(Action.resetState, (state) => {
@@ -69,14 +48,16 @@ const _counterReducer = createReducer(
     newState.results   = parser.results();
     newState.variables = parser.vars();
     newState.functions = parser.functions();
-    newState.output    += result;
+    newState.output    += newInput + "\n";
+    newState.output    += "ans=" + result;
+    parser.appendResults(result);
     historyAddState(newState);
     return newState;
   }),
-  on(Action.preview, (state: AppState, { newInput }) => {
+  on(Action.previewUpdate, (state: AppState, { newInput }) => {
     let newState: AppState = _.cloneDeep(state);
     let result = parsing(newState, newInput);
-    newState.preview = result;
+    newState.preview = "ans=" + result;
     return newState;
   }),
   on(Action.historyUndo, (state: AppState) => {
@@ -119,28 +100,23 @@ export function counterReducer(state:  AppState, action) {
   return _counterReducer(state, action);
 }
 
-function parse(str: string): string {
-  let toBeParsed = "";
-  let parsed;
-  let output: string = "";
+function parsing(newState, newInput) {
+  // Restore the parser state from store
+  parser.setVars(newState.variables);
+  parser.setFunctions(newState.functions);
+  parser.setResults(newState.results);
 
-  console.log("Running parser");
+  let output;
 
-  output = str + "\n";
-  toBeParsed = str;
-
-  try {
-    if(toBeParsed != "") {
-      parsed = parser.parse(toBeParsed);
-      parser.appendResults(parsed);
-      output += "  ans=" + parsed + "\n\n";
-    }
+  try {  
+    output = parser.parse(newInput);    
   } catch (error) {
     console.log("**** Syntax Error parsing ****");
-    console.log(str);
+    console.log(newInput);
     console.log("---- Returned value ----");
     console.log(error);
     output += "  " + error.name + "\n\n";
   }
+
   return output;
 }
