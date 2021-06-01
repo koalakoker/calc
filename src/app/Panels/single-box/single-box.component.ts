@@ -183,16 +183,16 @@ export class SingleBoxComponent {
   }
 
   save() {
-    // this.localStoreService.setKey("inputList", this.inputList.join(';'));
+    this.localStoreService.setKey("inputList", this.inputList.join(';'));
   }
 
   load() {
-    // let inputList = this.localStoreService.getKey("inputList").split(';');
-    // inputList.forEach(str => {
-    //   this.store.dispatch(Action.addString({
-    //     newInput: str
-    //   }));
-    // });
+    let inputList = this.localStoreService.getKey("inputList").split(';');
+    inputList.forEach(str => {
+      this.store.dispatch(Action.addString({
+        newInput: str
+      }));
+    });
   }
 
   saveFile() {

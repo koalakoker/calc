@@ -49,7 +49,7 @@ const _counterReducer = createReducer(
     newState.variables = parser.vars();
     newState.functions = parser.functions();
     newState.output    += newInput + "\n";
-    newState.output    += "ans=" + result;
+    newState.output    += "ans=" + result + "\n\n";
     parser.appendResults(result);
     historyAddState(newState);
     return newState;
