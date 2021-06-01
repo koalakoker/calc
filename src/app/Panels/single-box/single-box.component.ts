@@ -6,7 +6,6 @@ import { AppState } from '../../State/appState';
 import * as Action from '../../State/state.actions';
 import { Observable } from 'rxjs';
 import * as Selector from '../../State/state.selector';
-import { ParserService } from '../../Parser/parser.service';
 import { saveAs } from '../../../../node_modules/file-saver';
 import { OutputComponent } from '../output/output.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -40,8 +39,7 @@ export class SingleBoxComponent {
   constructor(
     private localStoreService: LocalStoreService,
     private store: Store,
-    private _snackBar: MatSnackBar,
-    private parser: ParserService) {
+    private _snackBar: MatSnackBar) {
     
       setTimeout(() => {
       this.load();
@@ -82,12 +80,11 @@ export class SingleBoxComponent {
       this._snackBar.dismiss();
       return;
     }
-    let inputList: Array<string> = [];
-    this.inputList.forEach(str => {
-      inputList.push(str);
-    });
-    inputList.push(this.input);
-    let lastAns: string = this.parser.lastAns;
+    
+    // Dispatch acton preview
+    
+    let lastAns: string = "to be completed";
+    
     if (!(lastAns === "NaN")) {
       this._snackBar.open("ans = " + lastAns, "hide");
     }
