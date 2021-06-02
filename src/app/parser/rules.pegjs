@@ -30,11 +30,12 @@
       if (argList.length != fnArg.length) return NaN;
       var len = argList.length;
       for (var i = 0; i < len; i++) {
-        expr += argList[i] + "=" + fnArg[i] +"\n"; 
+        expr = argList[i] + "=" + fnArg[i];
+        peg$parse(expr);
       }
-      expr += ex_functions[fnName].expr;
+      expr = ex_functions[fnName].expr;
       var ans = peg$parse(expr);
-      result = ans.results[len];
+      result = ans;
       return result;
     }
     if (fnName === "hex") {
