@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ElementRef, ViewChild } from '@angular/core';
 import { LocalStoreService } from '../../Services/local-store.service';
-import { Store } from '@ngrx/store';
+import { createSelector, Store } from '@ngrx/store';
 import { AppState } from '../../State/appState';
 import * as Action from '../../State/state.actions';
 import { Observable } from 'rxjs';
@@ -65,6 +65,11 @@ export class SingleBoxComponent {
       }
       this.lastInputEvaluated = this.input;
     });
+    this.store.select(
+      createSelector((state: AppState) => state["state"],
+        (state: AppState) => state)
+      
+      ).subscribe((state) => this.state = state );
     
     this.reader.onload = (evt) => {
       let inputList = evt.target.result.toString().split('\n');
@@ -136,15 +141,18 @@ export class SingleBoxComponent {
     }
   }
 
-  newInput(input: string) {
+  newInput(input: string): void {
     if (input === "clear") {
       this.store.dispatch(Action.resetState());
       this.output = "";
-    } else {
-      this.store.dispatch(Action.addString({
-        newInput: input
-       }));
+      return;
     }
+    
+    if (input === "test") {
+      console.log("Test");
+    }
+    
+    this.store.dispatch(Action.addString({newInput: input }));
   }
 
   clearInput() {
