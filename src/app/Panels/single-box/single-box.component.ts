@@ -72,7 +72,7 @@ export class SingleBoxComponent {
       ).subscribe((state) => this.state = state );
     
     this.reader.onload = (evt) => {
-      let inputList = evt.target.result.toString().split('\n');
+      let inputList = evt.target.result.toString().split('\r\n');
       inputList.forEach( str => {
         this.store.dispatch(Action.addString({
           newInput: str
@@ -209,7 +209,7 @@ export class SingleBoxComponent {
   }
 
   saveFile() {
-    const blob = new Blob([this.inputList.join('\n')],{ type: "text/plain;charset=utf-8" });
+    const blob = new Blob([this.inputList.join('\r\n')],{ type: "text/plain;charset=utf-8" });
     saveAs(blob, "calcHystory.txt");
   }
 
