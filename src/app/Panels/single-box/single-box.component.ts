@@ -195,8 +195,12 @@ export class SingleBoxComponent {
     this.localStoreService.setKey("inputList", this.inputList.join(';'));
   }
 
-  load() {
-    let inputList = this.localStoreService.getKey("inputList").split(';');
+  load(): void {
+    let listString = this.localStoreService.getKey("inputList");
+    if (listString === "") {
+      return;
+    }
+    let inputList = listString.split(';');
     inputList.forEach(str => {
       this.store.dispatch(Action.addString({
         newInput: str
