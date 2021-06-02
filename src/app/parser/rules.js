@@ -2003,6 +2003,30 @@ function peg$parse(input, options) {
 
 
     var ans;
+
+    function ex_setArgsAsVariables(argList, fnArg) {
+      var len = argList.length;
+      var oldValues = [];
+      for (var i = 0; i < len; i++) {
+        oldValues.push(ex_variables[argList[i]]);
+        var expr = argList[i] + "=" + fnArg[i];
+        peg$parse(expr);
+      }
+      return oldValues;
+    }
+
+    function ex_resetArgsAsVariables(argList, oldValues) {
+      var len = argList.length;
+      for (var i = 0; i < len; i++) {
+        var value = oldValues[i];
+        if (value !== undefined) {
+          ex_variables[argList[i]] = oldValues[i];
+        } else {
+          delete ex_variables[argList[i]];
+        }
+      }
+    }
+
     var ex_fn = function (fnName, fnArg) {
     	var result = NaN;
       if (typeof Decimal[fnName] !== 'undefined') {
@@ -2013,14 +2037,11 @@ function peg$parse(input, options) {
         var argList = ex_functions[fnName].arg.split(',');
         var expr = "";
         if (argList.length != fnArg.length) return NaN;
-        var len = argList.length;
-        for (var i = 0; i < len; i++) {
-          expr = argList[i] + "=" + fnArg[i];
-          peg$parse(expr);
-        }
+        var oldValues = ex_setArgsAsVariables(argList, fnArg);
         expr = ex_functions[fnName].expr;
         var ans = peg$parse(expr);
         result = ans;
+        ex_resetArgsAsVariables(argList, oldValues);
         return result;
       }
       if (fnName === "hex") {
