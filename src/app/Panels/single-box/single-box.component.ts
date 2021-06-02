@@ -145,6 +145,7 @@ export class SingleBoxComponent {
     if (input === "clear") {
       this.store.dispatch(Action.resetState());
       this.output = "";
+      this.save();
       return;
     }
     

@@ -38,8 +38,9 @@ function historyAddState(newState: AppState) {
 const _stateReducer = createReducer(
   initialState,
   on(Action.resetState, (state) => {
-    historyAddState(initialState);
-    return initialState
+    let newState: AppState = _.cloneDeep(initialState);
+    historyAddState(newState);
+    return newState;
   }),
   on(Action.addString, (state: AppState, { newInput }) => {
     let newState: AppState = _.cloneDeep(state);
