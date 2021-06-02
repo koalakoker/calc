@@ -35,7 +35,7 @@ function historyAddState(newState: AppState) {
   }
 }
 
-const _counterReducer = createReducer(
+const _stateReducer = createReducer(
   initialState,
   on(Action.resetState, (state) => {
     historyAddState(initialState);
@@ -57,7 +57,12 @@ const _counterReducer = createReducer(
   on(Action.previewUpdate, (state: AppState, { newInput }) => {
     let newState: AppState = _.cloneDeep(state);
     let result = parsing(newState, newInput);
-    newState.preview = "ans=" + result;
+    if (result === "SyntaxError")
+    {
+      newState.preview = undefined;
+    } else {
+      newState.preview = "ans=" + result;
+    }
     return newState;
   }),
   on(Action.historyUndo, (state: AppState) => {
@@ -96,8 +101,8 @@ const _counterReducer = createReducer(
   })
 );
 
-export function counterReducer(state:  AppState, action) {
-  return _counterReducer(state, action);
+export function stateReducer(state:  AppState, action) {
+  return _stateReducer(state, action);
 }
 
 function parsing(newState, newInput) {
@@ -111,11 +116,11 @@ function parsing(newState, newInput) {
   try {  
     output = parser.parse(newInput);    
   } catch (error) {
-    console.log("**** Syntax Error parsing ****");
-    console.log(newInput);
-    console.log("---- Returned value ----");
-    console.log(error);
-    output += "  " + error.name + "\n\n";
+    // console.log("**** Syntax Error parsing ****");
+    // console.log(newInput);
+    // console.log("---- Returned value ----");
+    // console.log(error);
+    output = error.name;
   }
 
   return output;

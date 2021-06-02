@@ -15,7 +15,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppComponent } from './app.component';
 
-import { counterReducer } from './State/state.reducer';
+import { stateReducer } from './State/state.reducer';
 import { environment } from 'src/environments/environment';
 
 import { MainTabComponent } from './main-tab/main-tab.component';
@@ -39,7 +39,7 @@ import { ResultsComponent } from './Panels/results/results.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    StoreModule.forRoot({ state: counterReducer}),
+    StoreModule.forRoot({ state: stateReducer}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     BrowserAnimationsModule,
     MatInputModule,
