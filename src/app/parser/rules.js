@@ -2122,34 +2122,35 @@ var ex_myPar = function (r1, r2) { return r1.times(r2).dividedBy(r1.plus(r2)) }
 var ex_myPI = function () { return new Decimal(-1).acos(); }
 var ex_myE = function () { return new Decimal(1).exp(); }
 
-export var SyntaxError = peg$SyntaxError;
-export var parse = peg$parse;
+var SyntaxError = peg$SyntaxError;
+var parse = peg$parse;
 
-export function vars() {
+function vars() {
   return ex_variables;
 }
 
-export function setVars(newVars) {
+function setVars(newVars) {
   ex_variables = _.cloneDeep(newVars);
 }
 
-export function functions() {
+function functions() {
   return ex_functions;
 }
 
-export function setFunctions(newFunctions) {
+function setFunctions(newFunctions) {
   ex_functions = _.cloneDeep(newFunctions);
 }
 
-export function results() {
+function results() {
   return ex_results;
 }
 
-export function setResults(newResults) {
+function setResults(newResults) {
   ex_results = _.cloneDeep(newResults);
 }
 
-export function appendResults(newResults) {
+function appendResults(newResults) {
   ex_results.push(newResults);
 }
 
+export { SyntaxError, parse, vars, setVars, functions, setFunctions, results, setResults, appendResults};

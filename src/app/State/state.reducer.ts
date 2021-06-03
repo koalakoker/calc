@@ -114,15 +114,15 @@ function parsing(newState, newInput) {
 
   let output;
 
-  try {  
+  //try {  
     output = parser.parse(newInput);    
-  } catch (error) {
-    // console.log("**** Syntax Error parsing ****");
-    // console.log(newInput);
-    // console.log("---- Returned value ----");
-    // console.log(error);
-    output = error.name;
-  }
+  // } catch (error) {
+  //   // console.log("**** Syntax Error parsing ****");
+  //   // console.log(newInput);
+  //   // console.log("---- Returned value ----");
+  //   // console.log(error);
+  //   output = error.name;
+  // }
 
   return output;
 }
