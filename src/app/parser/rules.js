@@ -265,7 +265,7 @@ function peg$parse(input, options) {
       peg$c76 = peg$literalExpectation("ans[", false),
       peg$c77 = "]",
       peg$c78 = peg$literalExpectation("]", false),
-      peg$c79 = function(line) {return ex_results[line];},
+      peg$c79 = function(line) {return new Decimal(ex_results[line]);},
       peg$c80 = peg$otherExpectation("function value"),
       peg$c81 = /^[(]/,
       peg$c82 = peg$classExpectation(["("], false, false),
@@ -2071,7 +2071,7 @@ function peg$parse(input, options) {
     var getVarValue = function(variable) {
       var value = NaN;
       if (typeof ex_variables[variable] !== 'undefined') {
-        value = ex_variables[variable].value;
+        value = new Decimal(ex_variables[variable].value);
       }
       return value;
     }

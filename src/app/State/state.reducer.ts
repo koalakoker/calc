@@ -49,7 +49,11 @@ const _stateReducer = createReducer(
     newState.results   = parser.results();
     newState.variables = parser.vars();
     newState.functions = parser.functions();
-    newState.output    += newInput + "\n  ans=" + result + "\n\n";
+    if (result === "SyntaxError") {
+      newState.output += newInput + "\n  " + result + "\n\n";
+    } else {
+      newState.output += newInput + "\n  ans=" + result + "\n\n";
+    }
     parser.appendResults(result);
     historyAddState(newState);
     return newState;
