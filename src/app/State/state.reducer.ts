@@ -49,8 +49,7 @@ const _stateReducer = createReducer(
     newState.results   = parser.results();
     newState.variables = parser.vars();
     newState.functions = parser.functions();
-    newState.output    += newInput + "\n";
-    newState.output    += "ans=" + result + "\n\n";
+    newState.output    += newInput + "\n  ans=" + result + "\n\n";
     parser.appendResults(result);
     historyAddState(newState);
     return newState;
@@ -106,7 +105,7 @@ export function stateReducer(state:  AppState, action) {
   return _stateReducer(state, action);
 }
 
-function parsing(newState, newInput) {
+function parsing(newState: AppState, newInput: string) {
   // Restore the parser state from store
   parser.setVars(newState.variables);
   parser.setFunctions(newState.functions);
@@ -114,15 +113,15 @@ function parsing(newState, newInput) {
 
   let output;
 
-  //try {  
+  try {  
     output = parser.parse(newInput);    
-  // } catch (error) {
-  //   // console.log("**** Syntax Error parsing ****");
-  //   // console.log(newInput);
-  //   // console.log("---- Returned value ----");
-  //   // console.log(error);
-  //   output = error.name;
-  // }
+  } catch (error) {
+    // console.log("**** Syntax Error parsing ****");
+    // console.log(newInput);
+    // console.log("---- Returned value ----");
+    // console.log(error);
+    output = error.name;
+  }
 
   return output;
 }

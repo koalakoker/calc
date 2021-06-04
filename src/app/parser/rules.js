@@ -2077,11 +2077,7 @@ function peg$parse(input, options) {
     }
     
     var setVar = function(varName, value) {
-      if (typeof ex_variables[varName] ==! 'undefined') {
-      	ex_variables[varName] = {value:value};
-      } else {
-      	ex_variables[varName] = {value:value};
-      }
+      ex_variables[varName] = {value:value.toString()};
       return value;
     }
 
@@ -2150,7 +2146,7 @@ function setResults(newResults) {
 }
 
 function appendResults(newResults) {
-  ex_results.push(newResults);
+  ex_results.push(newResults.toString());
 }
 
 export { SyntaxError, parse, vars, setVars, functions, setFunctions, results, setResults, appendResults};
