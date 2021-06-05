@@ -1,0 +1,2 @@
+#!/bin/zsh
+convert favicon.png favicon.ico

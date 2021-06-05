@@ -1,0 +1,19 @@
+.content-inside-grid{
+  position: absolute;
+  top: 0px;
+  width: 380px;
+}
+
+.mat-tab-group {
+  width: 380px;
+}
+
+::ng-deep.mat-tab-link,  ::ng-deep.mat-tab-label, ::ng-deep.mat-tab-label-active{
+    min-width: 100px!important;
+}
+
+.label-version {
+  position: absolute;
+  bottom: -20px;
+  right: 10px;
+}

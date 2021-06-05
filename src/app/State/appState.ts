@@ -1,6 +1,8 @@
 export interface AppState {
-  output: string;
-  toBeParsed: string;
   inputList: Array<string>;
-  inputListSelected: number;
+  variables: any;
+  functions: any;
+  results: Array<any>;
+  output: string;
+  preview: string;
 }

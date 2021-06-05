@@ -1,0 +1,27 @@
+<table>
+  <panel-output #outputBox [output]="output"></panel-output>
+  <tr>
+  <td align="center">
+    <mat-form-field class="calc-outbox">
+      <input #inputBox matInput placeholder="input expression" 
+      [(ngModel)]="input" (keyup)="onChange($event)" size="25">
+    </mat-form-field>
+  </td>
+</tr>
+<tr>
+  <td>
+    <div class="button-row">
+      <button mat-mini-fab color="primary" (click)="undo()"            matTooltip="undo"                ><mat-icon>undo</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="redo()"            matTooltip="redo"                ><mat-icon>redo</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="up()"              matTooltip="previous expression" ><mat-icon>arrow_upward</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="down()"            matTooltip="next expression"     ><mat-icon>arrow_downward</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="enter()"           matTooltip="evaluate expression" ><mat-icon>keyboard_return</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="clearInput()"      matTooltip="clear expression"    ><mat-icon>clear</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="saveFile()"        matTooltip="save hystory"        ><mat-icon>save</mat-icon></button>
+      <button mat-mini-fab color="primary" (click)="fileInput.click()" matTooltip="load file"           ><mat-icon>add_circle</mat-icon>
+        <input #fileInput type="file" (change)="loadFile($event)" style="display:none;" />
+      </button>
+    </div>
+  </td>
+</tr>
+</table>

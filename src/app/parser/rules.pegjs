@@ -18,14 +18,29 @@
   var ex_myPI  = function(){return Math.acos(-1);}
   var ex_myE   = function(){return Math.exp(1); }
   
-  var evaluate = function(head, tail) {
-  	ans = head;
-  	tail.reduce(function(result, element) {
-    	ans = element[2];	
-    	return ans;
-    }, head);
+  function ex_setArgsAsVariables(argList, fnArg) {
+    var len = argList.length;
+    var oldValues = [];
+    for (var i = 0; i < len; i++) {
+      oldValues.push(ex_variables[argList[i]]);
+      var expr = argList[i] + "=" + fnArg[i];
+      peg$parse(expr);
+    }
+    return oldValues;
   }
-  
+
+  function ex_resetArgsAsVariables(argList, oldValues) {
+    var len = argList.length;
+    for (var i = 0; i < len; i++) {
+      var value = oldValues[i];
+      if (value !== undefined) {
+        ex_variables[argList[i]] = oldValues[i];
+      } else {
+        delete ex_variables[argList[i]];
+      }
+    }
+  }
+
   var ex_fn = function (fnName, fnArg) {
   	var result = NaN;
     if (typeof Math[fnName] !== 'undefined') {
@@ -36,13 +51,11 @@
       var argList = ex_functions[fnName].arg.split(',');
       var expr = "";
       if (argList.length != fnArg.length) return NaN;
-      var len = argList.length;
-      for (var i = 0; i < len; i++) {
-        expr += argList[i] + "=" + fnArg[i] +"\n"; 
-      }
-      expr += ex_functions[fnName].expr;
+      var oldValues = ex_setArgsAsVariables(argList, fnArg);
+      expr = ex_functions[fnName].expr;
       var ans = peg$parse(expr);
-      result = ans.results[len];
+      result = ans;
+      ex_resetArgsAsVariables(argList, oldValues);
       return result;
     }
     if (fnName === "hex") {
@@ -58,10 +71,11 @@
   
   var ex_fnAssign = function(fnName, fnArg, fnExpr) {
   	var retVal = NaN;
-    if ((typeof Math        [fnName] === 'undefined') && 
-        (typeof ex_functions[fnName] === 'undefined')) {
+    if (typeof Math        [fnName] === 'undefined') {
       ex_functions[fnName] = {};
+      fnExpr = fnExpr.replace(/\s+/g,'');
       ex_functions[fnName].expr = fnExpr;
+      fnArg = fnArg.replace(/\s+/g,'');
       ex_functions[fnName].arg  = fnArg;
       retVal = 0;
     }
@@ -87,20 +101,10 @@
 
 }
 
-Program = 
-  _ head:Input _ tail:(Cr _ Input _)* {
-    evaluate(head, tail);
-    return {
-    	results: ex_results,
-        vars: ex_variables,
-        functions: ex_functions
-    };
-  }
-
 Input = ans:( FnAssign / VarAssign / 
         Expression / Command / FnValue / AnsValue / VarValue) {
         setVar("ans", ans);
-    	ex_results.push(ans);
+    	return ans;
 	}
 
 Expression = 
@@ -203,7 +207,7 @@ VarAssign "var assignment" =
  }
  
 VarList "Variable list" = 
-  _ Name _ ("," _ Name)* {
+  Name  (_ "," _ Name)* {
  return text();
  }
  
@@ -221,6 +225,6 @@ FnExpr "Function expression" =
   [^\n\r]+ {return text();}
  
 FnAssign "function assignment" = 
-  _ fnName:Name _ [(] _ fnArg: VarList _ [)][=] fnExpr:FnExpr {
+  _ fnName:Name _ [(] _ fnArg: VarList _ [)] _ [=] fnExpr:FnExpr {
   return ex_fnAssign(fnName, fnArg, fnExpr);
 }

@@ -1,18 +1,1 @@
-<table>
-  <tr>
-    <td>
-      <single-box></single-box>
-    </td>
-    <td valign="top">
-      <app-debug></app-debug>
-    </td>
-    <td>
-      <h2>Books</h2>
-      <app-book-list class="book-list" [books]="books$ | async" (add)="onAdd($event)"></app-book-list>
-      
-      <h2>My Collection</h2>
-      <app-book-collection class="book-collection" [books]="bookCollection$ | async" (remove)="onRemove($event)">
-      </app-book-collection>
-    </td>
-  </tr>
-</table>
+<app-main-tab></app-main-tab>

@@ -1,0 +1,15 @@
+input {
+  font-size: 18px;
+}
+
+.mat-icon{
+    height:20px;
+    width:20px;
+    font-size:20px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  width: 320;
+}
